@@ -1,0 +1,4 @@
+[submodule "HaselCommon"]
+	path = HaselCommon
+	url = https://github.com/Haselnussbomber/HaselCommon.git
+	branch = main

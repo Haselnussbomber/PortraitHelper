@@ -1,0 +1,20 @@
+// winbase.h
+
+SetThreadExecutionState
+EXECUTION_STATE
+
+// winuser.h
+
+OpenClipboard
+CloseClipboard
+EmptyClipboard
+SetClipboardData
+RegisterClipboardFormat
+CLIPBOARD_FORMAT
+
+// windgi.h
+
+BITMAPINFOHEADER
+BITMAPV5HEADER
+CIEXYZ
+CIEXYZTRIPLE

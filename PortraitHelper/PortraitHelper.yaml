@@ -1,0 +1,8 @@
+name: PortraitHelper
+author: Haselnussbomber
+punchline: A helper for editing and managing portraits.
+repo_url: https://github.com/Haselnussbomber/PortraitHelper
+description: PortraitHelper is a small plugin allowing you to finetune your portraits and to save them as presets.
+load_required_state: 1
+can_unload_async: true
+accepts_feedback: false
