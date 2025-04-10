@@ -22,6 +22,7 @@ using PortraitHelper.Config;
 using PortraitHelper.Enums;
 using PortraitHelper.Records;
 using PortraitHelper.Services;
+using PortraitHelper.Windows.Dialogs;
 using PortraitHelper.Windows.Overlays;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
@@ -47,6 +48,8 @@ public partial class PresetCard : IDisposable
     private readonly ExcelService _excelService;
     private readonly BannerService _bannerService;
     private readonly ClipboardService _clipboardService;
+    private readonly DeletePresetDialog _deletePresetDialog;
+    private readonly EditPresetDialog _editPresetDialog;
 
     private readonly SavedPreset _preset;
     private readonly uint _bannerFrameImage;
@@ -71,7 +74,7 @@ public partial class PresetCard : IDisposable
 
     public PresetCard(SavedPreset preset)
     {
-        // TODO: WAAAH. Change this!!
+        // TODO: WAAAH. Change this!! move drawing logic to PresetBrowserOverlay
         _logger = Service.Get<ILogger<PresetCard>>();
         _pluginInterface = Service.Get<IDalamudPluginInterface>();
         _dataManager = Service.Get<IDataManager>();
@@ -81,6 +84,8 @@ public partial class PresetCard : IDisposable
         _excelService = Service.Get<ExcelService>();
         _bannerService = Service.Get<BannerService>();
         _clipboardService = Service.Get<ClipboardService>();
+        _deletePresetDialog = Service.Get<DeletePresetDialog>();
+        _editPresetDialog = Service.Get<EditPresetDialog>();
 
         _preset = preset;
 
@@ -282,7 +287,7 @@ public partial class PresetCard : IDisposable
         }
 
         if (ImGui.MenuItem(_textService.Translate("PortraitHelperWindows.PresetCard.ContextMenu.EditPreset.Label")))
-            overlay.EditPresetDialog.Open(_preset);
+            _editPresetDialog.Open(_preset);
 
         if (ImGui.MenuItem(_textService.Translate("PortraitHelperWindows.PresetCard.ContextMenu.ExportToClipboard.Label")))
             Task.Run(() => _clipboardService.SetClipboardPortraitPreset(_preset.Preset));
@@ -307,7 +312,7 @@ public partial class PresetCard : IDisposable
         ImGui.Separator();
 
         if (ImGui.MenuItem(_textService.Translate("PortraitHelperWindows.PresetCard.ContextMenu.DeletePreset.Label")))
-            overlay.DeletePresetDialog.Open(overlay, _preset);
+            _deletePresetDialog.Open(_preset);
     }
 
     public static void DrawLoadingSpinner(Vector2 center, float radius = 10f)

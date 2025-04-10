@@ -1,28 +1,24 @@
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
 using Dalamud.Interface.Utility.Raii;
-using HaselCommon.Extensions.Collections;
 using HaselCommon.Gui;
 using HaselCommon.Services;
 using ImGuiNET;
 using PortraitHelper.Config;
+using PortraitHelper.Services;
 using PortraitHelper.Windows.Dialogs;
 
 namespace PortraitHelper.Windows.Overlays;
 
-[RegisterScoped, AutoConstruct]
+[RegisterSingleton, AutoConstruct]
 public unsafe partial class PresetBrowserOverlay : Overlay
 {
     private readonly TextService _textService;
     private readonly PluginConfig _pluginConfig;
-
-    public Dictionary<Guid, PresetCard> PresetCards { get; init; } = [];
+    private readonly DeletePresetDialog _deletePresetDialog;
+    private readonly EditPresetDialog _editPresetDialog;
+    private readonly PresetCardManager _presetCardManager;
 
     public MenuBar MenuBar { get; internal set; } = null!;
-
-    public DeletePresetDialog DeletePresetDialog { get; init; }
-    public EditPresetDialog EditPresetDialog { get; init; }
 
     [AutoPostConstruct]
     private void Initialize()
@@ -36,7 +32,7 @@ public unsafe partial class PresetBrowserOverlay : Overlay
 
     public override void OnClose()
     {
-        PresetCards.Dispose();
+        _presetCardManager.Clear();
         base.OnClose();
     }
 
@@ -52,8 +48,8 @@ public unsafe partial class PresetBrowserOverlay : Overlay
 
         DrawPresetBrowserContent();
 
-        DeletePresetDialog.Draw();
-        EditPresetDialog.Draw();
+        _deletePresetDialog.Draw();
+        _editPresetDialog.Draw();
     }
 
     private void DrawPresetBrowserContent()
@@ -79,18 +75,7 @@ public unsafe partial class PresetBrowserOverlay : Overlay
         using var indentSpacing = ImRaii.PushStyle(ImGuiStyleVar.IndentSpacing, style.ItemSpacing.X);
         using var indent = ImRaii.PushIndent();
 
-        var presetCards = _pluginConfig.Presets
-            .Select((preset) =>
-            {
-                if (!PresetCards.TryGetValue(preset.Id, out var card))
-                {
-                    var presetCard = new PresetCard(preset);
-                    PresetCards.Add(preset.Id, presetCard);
-                }
-
-                return card;
-            })
-            .ToArray();
+        var presetCards = _presetCardManager.GetPresetCards();
 
         var presetsPerRow = 3;
         var availableWidth = ImGui.GetContentRegionAvail().X - style.ItemInnerSpacing.X * presetsPerRow;

@@ -1,76 +1,89 @@
+using System.Numerics;
+using Dalamud.Interface.Utility;
+using Dalamud.Interface.Utility.Raii;
+using HaselCommon.Gui;
 using HaselCommon.Services;
 using ImGuiNET;
 using PortraitHelper.Config;
-using PortraitHelper.ImGuiComponents;
 using PortraitHelper.Records;
+using PortraitHelper.Utils;
 
 namespace PortraitHelper.Windows.Dialogs;
 
-[RegisterScoped, AutoConstruct]
-public partial class EditPresetDialog : ConfirmationDialog
+[RegisterSingleton, AutoConstruct]
+public partial class EditPresetDialog
 {
-    private readonly PluginConfig _pluginConfig;
     private readonly TextService _textService;
+    private readonly PluginConfig _pluginConfig;
 
-    private ConfirmationButton _saveButton;
-    private string? _name;
+    private bool _shouldOpen;
     private SavedPreset? _preset;
-
-    [AutoPostConstruct]
-    private void Initialize()
-    {
-        WindowName = _textService.Translate("PortraitHelperWindows.EditPresetDialog.Title");
-
-        AddButton(_saveButton = new ConfirmationButton(_textService.Translate("ConfirmationButtonWindow.Save"), OnSave));
-        AddButton(new ConfirmationButton(_textService.Translate("ConfirmationButtonWindow.Cancel"), Close));
-    }
+    private string _name;
 
     public void Open(SavedPreset preset)
     {
         _preset = preset;
         _name = preset.Name;
-        Show();
+        _shouldOpen = true;
     }
 
-    public void Close()
+    public void Draw()
     {
-        Hide();
-        _name = null;
-        _preset = null;
-    }
+        if (_preset == null)
+            return;
 
-    public override bool DrawCondition()
-        => base.DrawCondition() && _name != null && _preset != null;
+        var title = _textService.Translate("PortraitHelperWindows.EditPresetDialog.Title");
 
-    public override void InnerDraw()
-    {
+        if (_shouldOpen)
+        {
+            ImGui.OpenPopup(title);
+            _shouldOpen = false;
+        }
+
+        if (!ImGui.IsPopupOpen(title))
+            return;
+
+        // Always center this window when appearing
+        var center = ImGui.GetMainViewport().GetCenter();
+        ImGui.SetNextWindowPos(center, ImGuiCond.Appearing, new(0.5f, 0.5f));
+
+        using var modal = ImRaiiExt.PopupModal(title, ImGuiWindowFlags.AlwaysAutoResize);
+        if (!modal) return;
+
         ImGui.TextUnformatted(_textService.Translate("PortraitHelperWindows.EditPresetDialog.Name.Label"));
+        ImGui.InputText("##PresetName", ref _name, Constants.PresetNameMaxLength);
+
+        var disabled = string.IsNullOrWhiteSpace(_name);
+        var shouldSave = !disabled && (ImGui.IsKeyPressed(ImGuiKey.Enter) || ImGui.IsKeyPressed(ImGuiKey.KeypadEnter));
 
         ImGui.Spacing();
+        ImGui.Separator();
+        ImGui.Spacing();
 
-        ImGui.InputText("##PresetName", ref _name, 30);
+        var combinedButtonWidths = ImGui.GetStyle().ItemSpacing.X
+            + MathF.Max(Constants.DialogButtonMinWidth, ImGuiHelpers.GetButtonSize(_textService.Translate("ConfirmationButtonWindow.Save")).X)
+            + MathF.Max(Constants.DialogButtonMinWidth, ImGuiHelpers.GetButtonSize(_textService.Translate("ConfirmationButtonWindow.Cancel")).X);
 
-        var disabled = string.IsNullOrEmpty(_name.Trim());
-        if (!disabled && (ImGui.IsKeyPressed(ImGuiKey.Enter) || ImGui.IsKeyPressed(ImGuiKey.KeypadEnter)))
+        ImGuiUtils.PushCursorX((ImGui.GetContentRegionAvail().X - combinedButtonWidths) / 2f);
+
+        using (ImRaii.Disabled(disabled))
         {
-            OnSave();
+            if (ImGui.Button(_textService.Translate("ConfirmationButtonWindow.Save"), new Vector2(120, 0)) || shouldSave)
+            {
+                _preset.Name = _name;
+                _pluginConfig.Save();
+                _preset = null;
+                _name = string.Empty;
+                ImGui.CloseCurrentPopup();
+            }
         }
 
-        _saveButton.Disabled = disabled;
-    }
-
-    private void OnSave()
-    {
-        if (_preset == null || string.IsNullOrEmpty(_name?.Trim()))
+        ImGui.SetItemDefaultFocus();
+        ImGui.SameLine();
+        if (ImGui.Button(_textService.Translate("ConfirmationButtonWindow.Cancel"), new Vector2(120, 0)))
         {
-            Close();
-            return;
+            _preset = null;
+            ImGui.CloseCurrentPopup();
         }
-
-        _preset.Name = _name.Trim();
-
-        _pluginConfig.Save();
-
-        Close();
     }
 }

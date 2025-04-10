@@ -25,19 +25,19 @@ namespace PortraitHelper.Windows;
 [RegisterSingleton, AutoConstruct]
 public unsafe partial class MenuBar : SimpleWindow
 {
-    private readonly IServiceProvider _serviceProvider;
     private readonly ILogger<MenuBar> _logger;
+    private readonly IServiceProvider _serviceProvider;
     private readonly IDalamudPluginInterface _pluginInterface;
     private readonly PluginConfig _pluginConfig;
     private readonly TextService _textService;
     private readonly BannerService _bannerService;
     private readonly ClipboardService _clipboardService;
+    private readonly CreatePresetDialog _createPresetDialog;
 
     private IServiceScope? _serviceScope;
     private PortraitPreset? _initialPreset;
     private string _portraitName = string.Empty;
 
-    private CreatePresetDialog? _createPresetDialog;
     private AdvancedImportOverlay? _advancedImportOverlay;
     private AdvancedEditOverlay? _advancedEditOverlay;
     private PresetBrowserOverlay? _presetBrowserOverlay;
@@ -62,7 +62,6 @@ public unsafe partial class MenuBar : SimpleWindow
 
     public override void OnClose()
     {
-        _createPresetDialog?.Hide();
         _initialPreset = null;
         _portraitName = string.Empty;
         CloseOverlays();
@@ -211,7 +210,6 @@ public unsafe partial class MenuBar : SimpleWindow
         ImGui.SameLine();
         if (ImGuiUtils.IconButton("SaveAsPreset", FontAwesomeIcon.Download, _textService.Translate("PortraitHelperWindows.MenuBar.SaveAsPreset.Label")))
         {
-            _createPresetDialog ??= _serviceScope!.ServiceProvider.GetRequiredService<CreatePresetDialog>();
             _createPresetDialog.Open(_portraitName, PortraitPreset.FromState(), _bannerService.GetCurrentCharaViewImage());
         }
 
@@ -288,7 +286,7 @@ public unsafe partial class MenuBar : SimpleWindow
 
         UpdatePosition();
 
-        _createPresetDialog?.Draw();
+        _createPresetDialog.Draw();
     }
 
     public void UpdatePosition()
