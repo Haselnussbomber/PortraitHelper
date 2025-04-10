@@ -11,11 +11,11 @@ public record SavedPreset
     public HashSet<Guid> Tags;
 
     [JsonConstructor]
-    public SavedPreset(Guid Id, string Name, PortraitPreset? Preset, HashSet<Guid> Tags)
+    public SavedPreset(Guid id, string name, PortraitPreset? preset, HashSet<Guid> tags)
     {
-        this.Id = Id;
-        this.Name = Name;
-        this.Preset = Preset;
-        this.Tags = Tags;
+        Id = id;
+        Name = name;
+        Preset = preset;
+        Tags = tags;
     }
 }

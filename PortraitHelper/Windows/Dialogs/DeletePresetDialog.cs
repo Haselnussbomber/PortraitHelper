@@ -1,12 +1,11 @@
 using System.IO;
-using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
 using HaselCommon.Services;
 using ImGuiNET;
 using PortraitHelper.Config;
-using PortraitHelper.Extensions;
 using PortraitHelper.ImGuiComponents;
 using PortraitHelper.Records;
+using PortraitHelper.Services;
 using PortraitHelper.Windows.Overlays;
 
 namespace PortraitHelper.Windows.Dialogs;
@@ -14,10 +13,10 @@ namespace PortraitHelper.Windows.Dialogs;
 [RegisterScoped, AutoConstruct]
 public partial class DeletePresetDialog : ConfirmationDialog
 {
-    private readonly IDalamudPluginInterface _pluginInterface;
     private readonly INotificationManager _notificationManager;
     private readonly PluginConfig _pluginConfig;
     private readonly TextService _textService;
+    private readonly BannerService _bannerService;
 
     private PresetBrowserOverlay? _presetBrowserOverlay;
     private SavedPreset? _preset;
@@ -64,7 +63,7 @@ public partial class DeletePresetDialog : ConfirmationDialog
             card.Dispose();
         }
 
-        var thumbPath = _pluginInterface.GetPortraitThumbnailPath(_preset.Id);
+        var thumbPath = _bannerService.GetPortraitThumbnailPath(_preset.Id);
         if (File.Exists(thumbPath))
         {
             try

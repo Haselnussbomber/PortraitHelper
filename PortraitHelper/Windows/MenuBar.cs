@@ -1,4 +1,5 @@
 using System.Numerics;
+using System.Threading.Tasks;
 using Dalamud.Interface;
 using Dalamud.Interface.Utility;
 using Dalamud.Interface.Utility.Raii;
@@ -15,7 +16,7 @@ using Microsoft.Extensions.Logging;
 using PortraitHelper.Config;
 using PortraitHelper.Enums;
 using PortraitHelper.Records;
-using PortraitHelper.Utils;
+using PortraitHelper.Services;
 using PortraitHelper.Windows.Dialogs;
 using PortraitHelper.Windows.Overlays;
 
@@ -29,7 +30,8 @@ public unsafe partial class MenuBar : SimpleWindow
     private readonly IDalamudPluginInterface _pluginInterface;
     private readonly PluginConfig _pluginConfig;
     private readonly TextService _textService;
-    private readonly BannerUtils _bannerUtils;
+    private readonly BannerService _bannerService;
+    private readonly ClipboardService _clipboardService;
 
     private IServiceScope? _serviceScope;
     private PortraitPreset? _initialPreset;
@@ -132,16 +134,16 @@ public unsafe partial class MenuBar : SimpleWindow
         }
         else if (ImGuiUtils.IconButton("Reset", FontAwesomeIcon.Undo, _textService.GetAddonText(4830) ?? "Reset"))
         {
-            _initialPreset.ToState(_logger, _bannerUtils, ImportFlags.All);
+            _initialPreset.ToState(_logger, _bannerService, ImportFlags.All);
             agent->EditorState->SetHasChanged(false);
         }
 
         ImGui.SameLine();
         if (ImGuiUtils.IconButton("Copy", FontAwesomeIcon.Copy, _textService.Translate("PortraitHelperWindows.MenuBar.ExportToClipboard.Label"))) // GetAddonText(100) ?? "Copy"
-            PortraitPreset.FromState()?.ToClipboard(_logger);
+            Task.Run(() => _clipboardService.SetClipboardPortraitPreset(PortraitPreset.FromState()));
 
         ImGui.SameLine();
-        if (ClipboardUtils.ClipboardPreset == null)
+        if (_clipboardService.ClipboardPreset == null)
         {
             ImGuiUtils.IconButton("Paste", FontAwesomeIcon.Paste, _textService.Translate("PortraitHelperWindows.MenuBar.ImportFromClipboard.Label"), disabled: true); // GetAddonText(101) ?? "Paste"
         }
@@ -149,13 +151,13 @@ public unsafe partial class MenuBar : SimpleWindow
         {
             if (ImGuiUtils.IconButton("Paste", FontAwesomeIcon.Paste, _textService.Translate("PortraitHelperWindows.MenuBar.ImportFromClipboardAllSettings.Label")))
             {
-                ClipboardUtils.ClipboardPreset.ToState(_logger, _bannerUtils, ImportFlags.All);
+                _clipboardService.ClipboardPreset.ToState(_logger, _bannerService, ImportFlags.All);
                 CloseOverlays();
             }
         }
 
         ImGui.SameLine();
-        if (ClipboardUtils.ClipboardPreset == null)
+        if (_clipboardService.ClipboardPreset == null)
         {
             ImGuiUtils.IconButton("ViewModeAdvancedImport", FontAwesomeIcon.FileImport, _textService.Translate("PortraitHelperWindows.MenuBar.ToggleAdvancedImportMode.Label"), disabled: true);
         }
@@ -210,7 +212,7 @@ public unsafe partial class MenuBar : SimpleWindow
         if (ImGuiUtils.IconButton("SaveAsPreset", FontAwesomeIcon.Download, _textService.Translate("PortraitHelperWindows.MenuBar.SaveAsPreset.Label")))
         {
             _createPresetDialog ??= _serviceScope!.ServiceProvider.GetRequiredService<CreatePresetDialog>();
-            _createPresetDialog.Open(_portraitName, PortraitPreset.FromState(), _bannerUtils.GetCurrentCharaViewImage());
+            _createPresetDialog.Open(_portraitName, PortraitPreset.FromState(), _bannerService.GetCurrentCharaViewImage());
         }
 
         ImGui.SameLine();

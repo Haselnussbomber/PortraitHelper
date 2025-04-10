@@ -7,17 +7,12 @@ using PortraitHelper.Enums;
 
 namespace PortraitHelper.Windows.Overlays;
 
-#pragma warning disable CS9107
-
-[RegisterScoped]
-public unsafe class AlignmentToolSettingsOverlay(
-    WindowManager windowManager,
-    TextService textService,
-    LanguageProvider languageProvider,
-    PluginConfig pluginConfig,
-    ExcelService excelService)
-    : Overlay(windowManager, textService, languageProvider, pluginConfig, excelService)
+[RegisterScoped, AutoConstruct]
+public unsafe partial class AlignmentToolSettingsOverlay : Overlay
 {
+    private readonly TextService _textService;
+    private readonly PluginConfig _pluginConfig;
+
     public override OverlayType Type => OverlayType.LeftPane;
 
     public override void Draw()
@@ -25,38 +20,38 @@ public unsafe class AlignmentToolSettingsOverlay(
         base.Draw();
 
         ImGuiUtils.DrawSection(
-            textService.Translate("PortraitHelperWindows.AlignmentToolSettingsOverlay.Title.Inner"),
+            _textService.Translate("PortraitHelperWindows.AlignmentToolSettingsOverlay.Title.Inner"),
             pushDown: false,
             respectUiTheme: !IsWindow);
 
         var changed = false;
 
-        changed |= ImGui.Checkbox(textService.Translate("PortraitHelperWindows.AlignmentToolSettingsOverlay.ShowAlignmentTool.Label"), ref PluginConfig.ShowAlignmentTool);
+        changed |= ImGui.Checkbox(_textService.Translate("PortraitHelperWindows.AlignmentToolSettingsOverlay.ShowAlignmentTool.Label"), ref _pluginConfig.ShowAlignmentTool);
 
-        using var _ = ImRaii.Disabled(!PluginConfig.ShowAlignmentTool);
+        using var _ = ImRaii.Disabled(!_pluginConfig.ShowAlignmentTool);
 
         ImGui.Spacing();
         ImGui.Separator();
         ImGui.Spacing();
 
-        ImGui.TextUnformatted(textService.Translate("PortraitHelperWindows.AlignmentToolSettingsOverlay.VerticalLines.Label"));
+        ImGui.TextUnformatted(_textService.Translate("PortraitHelperWindows.AlignmentToolSettingsOverlay.VerticalLines.Label"));
         ImGui.Indent();
 
-        changed |= ImGui.SliderInt("##Vertical Lines", ref PluginConfig.AlignmentToolVerticalLines, 0, 10);
-        changed |= ImGui.ColorEdit4("##Vertical Color", ref PluginConfig.AlignmentToolVerticalColor);
+        changed |= ImGui.SliderInt("##Vertical Lines", ref _pluginConfig.AlignmentToolVerticalLines, 0, 10);
+        changed |= ImGui.ColorEdit4("##Vertical Color", ref _pluginConfig.AlignmentToolVerticalColor);
 
         ImGui.Unindent();
-        ImGui.TextUnformatted(textService.Translate("PortraitHelperWindows.AlignmentToolSettingsOverlay.HorizontalLines.Label"));
+        ImGui.TextUnformatted(_textService.Translate("PortraitHelperWindows.AlignmentToolSettingsOverlay.HorizontalLines.Label"));
         ImGui.Indent();
 
-        changed |= ImGui.SliderInt("##Horizontal Lines", ref PluginConfig.AlignmentToolHorizontalLines, 0, 10);
-        changed |= ImGui.ColorEdit4("##Horizontal Color", ref PluginConfig.AlignmentToolHorizontalColor);
+        changed |= ImGui.SliderInt("##Horizontal Lines", ref _pluginConfig.AlignmentToolHorizontalLines, 0, 10);
+        changed |= ImGui.ColorEdit4("##Horizontal Color", ref _pluginConfig.AlignmentToolHorizontalColor);
 
         ImGui.Unindent();
 
         if (changed)
         {
-            PluginConfig.Save();
+            _pluginConfig.Save();
         }
     }
 }

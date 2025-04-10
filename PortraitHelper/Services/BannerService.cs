@@ -13,14 +13,24 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using ActionSheet = Lumina.Excel.Sheets.Action;
 
-namespace PortraitHelper.Utils;
+namespace PortraitHelper.Services;
 
 [RegisterSingleton, AutoConstruct]
-public unsafe partial class BannerUtils
+public unsafe partial class BannerService
 {
     private readonly IDalamudPluginInterface _pluginInterface;
     private readonly ExcelService _excelService;
     private readonly TextService _textService;
+
+    public string GetPortraitThumbnailPath(Guid id)
+    {
+        var portraitsPath = Path.Join(_pluginInterface.ConfigDirectory.FullName, "Portraits");
+
+        if (!Directory.Exists(portraitsPath))
+            Directory.CreateDirectory(portraitsPath);
+
+        return Path.Join(portraitsPath, $"{id.ToString("D").ToLowerInvariant()}.png");
+    }
 
     public Image<Bgra32>? GetCurrentCharaViewImage()
     {

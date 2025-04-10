@@ -2,14 +2,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Dalamud.Interface.Utility.Raii;
-using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
 using HaselCommon.Services;
 using ImGuiNET;
 using PortraitHelper.Config;
-using PortraitHelper.Extensions;
 using PortraitHelper.ImGuiComponents;
 using PortraitHelper.Records;
+using PortraitHelper.Services;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp.Metadata.Profiles.Exif;
@@ -20,10 +19,10 @@ namespace PortraitHelper.Windows.Dialogs;
 [RegisterScoped, AutoConstruct]
 public partial class CreatePresetDialog : ConfirmationDialog
 {
-    private readonly IDalamudPluginInterface _pluginInterface;
     private readonly INotificationManager _notificationManager;
     private readonly PluginConfig _pluginConfig;
     private readonly TextService _textService;
+    private readonly BannerService _bannerService;
 
     private ConfirmationButton _saveButton;
     private string? _name;
@@ -127,7 +126,7 @@ public partial class CreatePresetDialog : ConfirmationDialog
         Task.Run(() =>
         {
             var guid = Guid.NewGuid();
-            var thumbPath = _pluginInterface.GetPortraitThumbnailPath(guid);
+            var thumbPath = _bannerService.GetPortraitThumbnailPath(guid);
 
             _image.Metadata.ExifProfile ??= new();
             _image.Metadata.ExifProfile.SetValue(ExifTag.UserComment, _preset.ToExportedString());

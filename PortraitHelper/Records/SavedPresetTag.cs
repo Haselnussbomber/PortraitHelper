@@ -8,13 +8,13 @@ public record SavedPresetTag
     public string Name;
 
     [JsonConstructor]
-    public SavedPresetTag(Guid Id, string Name)
+    public SavedPresetTag(Guid id, string name)
     {
-        this.Id = Id;
-        this.Name = Name;
+        Id = id;
+        Name = name;
     }
 
-    public SavedPresetTag(string Name) : this(Guid.NewGuid(), Name)
+    public SavedPresetTag(string name) : this(Guid.NewGuid(), name)
     {
     }
 }

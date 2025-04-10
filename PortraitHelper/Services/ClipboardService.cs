@@ -1,5 +1,6 @@
 using System.IO;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using PortraitHelper.Enums;
 using PortraitHelper.Records;
 using SixLabors.ImageSharp;
@@ -9,24 +10,46 @@ using Windows.Win32.Foundation;
 using Windows.Win32.Graphics.Gdi;
 using Windows.Win32.System.Ole;
 
-namespace PortraitHelper.Utils;
+namespace PortraitHelper.Services;
 
-// TODO: make it a service
-
-public static class ClipboardUtils
+[RegisterSingleton, AutoConstruct]
+public partial class ClipboardService
 {
-    public static ImportFlags CurrentImportFlags { get; set; } = ImportFlags.All;
-    public static PortraitPreset? ClipboardPreset { get; set; }
+    private readonly ILogger<ClipboardService> _logger;
 
-    public static async Task OpenClipboard()
+    public ImportFlags CurrentImportFlags { get; set; } = ImportFlags.All;
+    public PortraitPreset? ClipboardPreset { get; set; }
+
+    public async Task SetClipboardPortraitPreset(PortraitPreset? preset)
     {
-        while (!PInvoke.OpenClipboard(HWND.Null))
+        await OpenClipboard();
+
+        try
         {
-            await Task.Delay(100);
+            PInvoke.EmptyClipboard();
+
+            if (preset != null)
+            {
+                var clipboardText = Marshal.StringToHGlobalAnsi(preset.ToExportedString());
+                if (PInvoke.SetClipboardData((uint)CLIPBOARD_FORMAT.CF_TEXT, (HANDLE)clipboardText) != 0)
+                    ClipboardPreset = preset;
+            }
+            else
+            {
+                ClipboardPreset = null;
+            }
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Error during PortraitPreset.ToClipboard");
+        }
+        finally
+        {
+            PInvoke.CloseClipboard();
         }
     }
 
-    public static async Task SetClipboardImage(Image<Rgba32> image)
+    public async Task SetClipboardImage(Image<Rgba32> image)
     {
         await OpenClipboard();
 
@@ -37,7 +60,15 @@ public static class ClipboardUtils
         PInvoke.CloseClipboard();
     }
 
-    private static unsafe void SetDIB(Image<Rgba32> image)
+    private async Task OpenClipboard()
+    {
+        while (!PInvoke.OpenClipboard(HWND.Null))
+        {
+            await Task.Delay(100);
+        }
+    }
+
+    private unsafe void SetDIB(Image<Rgba32> image)
     {
         var data = Marshal.AllocHGlobal(sizeof(BITMAPINFOHEADER) + image.Width * image.Height * sizeof(Bgra32)); // tagBITMAPINFO
 
@@ -65,7 +96,7 @@ public static class ClipboardUtils
         PInvoke.SetClipboardData((uint)CLIPBOARD_FORMAT.CF_DIB, (HANDLE)data);
     }
 
-    private static unsafe void SetDIBV5(Image<Rgba32> image)
+    private unsafe void SetDIBV5(Image<Rgba32> image)
     {
         var data = Marshal.AllocHGlobal(sizeof(BITMAPV5HEADER) + image.Width * image.Height * sizeof(Bgra32));
 
@@ -106,7 +137,7 @@ public static class ClipboardUtils
         PInvoke.SetClipboardData((uint)CLIPBOARD_FORMAT.CF_DIBV5, (HANDLE)data);
     }
 
-    private static unsafe void SetPNG(Image<Rgba32> image)
+    private unsafe void SetPNG(Image<Rgba32> image)
     {
         using var ms = new MemoryStream();
         image.SaveAsPng(ms);

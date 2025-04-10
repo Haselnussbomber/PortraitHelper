@@ -20,9 +20,8 @@ using Lumina.Excel.Sheets;
 using Microsoft.Extensions.Logging;
 using PortraitHelper.Config;
 using PortraitHelper.Enums;
-using PortraitHelper.Extensions;
 using PortraitHelper.Records;
-using PortraitHelper.Utils;
+using PortraitHelper.Services;
 using PortraitHelper.Windows.Overlays;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
@@ -46,7 +45,8 @@ public partial class PresetCard : IDisposable
     private readonly PluginConfig _pluginConfig;
     private readonly TextService _textService;
     private readonly ExcelService _excelService;
-    private readonly BannerUtils _bannerUtils;
+    private readonly BannerService _bannerService;
+    private readonly ClipboardService _clipboardService;
 
     private readonly SavedPreset _preset;
     private readonly uint _bannerFrameImage;
@@ -71,6 +71,7 @@ public partial class PresetCard : IDisposable
 
     public PresetCard(SavedPreset preset)
     {
+        // TODO: WAAAH. Change this!!
         _logger = Service.Get<ILogger<PresetCard>>();
         _pluginInterface = Service.Get<IDalamudPluginInterface>();
         _dataManager = Service.Get<IDataManager>();
@@ -78,7 +79,8 @@ public partial class PresetCard : IDisposable
         _pluginConfig = Service.Get<PluginConfig>();
         _textService = Service.Get<TextService>();
         _excelService = Service.Get<ExcelService>();
-        _bannerUtils = Service.Get<BannerUtils>();
+        _bannerService = Service.Get<BannerService>();
+        _clipboardService = Service.Get<ClipboardService>();
 
         _preset = preset;
 
@@ -88,10 +90,10 @@ public partial class PresetCard : IDisposable
         if (_excelService.TryGetRow<BannerDecoration>(_preset.Preset.BannerDecoration, out var bannerDecorationImageRow))
             _bannerDecorationImage = (uint)bannerDecorationImageRow.Image;
 
-        _isBannerTimelineUnlocked = _bannerUtils.IsBannerTimelineUnlocked(_preset.Preset.BannerTimeline);
-        _isBannerBgUnlocked = _bannerUtils.IsBannerBgUnlocked(_preset.Preset.BannerBg);
-        _isBannerFrameUnlocked = _bannerUtils.IsBannerFrameUnlocked(_preset.Preset.BannerFrame);
-        _isBannerDecorationUnlocked = _bannerUtils.IsBannerDecorationUnlocked(_preset.Preset.BannerDecoration);
+        _isBannerTimelineUnlocked = _bannerService.IsBannerTimelineUnlocked(_preset.Preset.BannerTimeline);
+        _isBannerBgUnlocked = _bannerService.IsBannerBgUnlocked(_preset.Preset.BannerBg);
+        _isBannerFrameUnlocked = _bannerService.IsBannerFrameUnlocked(_preset.Preset.BannerFrame);
+        _isBannerDecorationUnlocked = _bannerService.IsBannerDecorationUnlocked(_preset.Preset.BannerDecoration);
     }
 
     public void Dispose()
@@ -232,7 +234,7 @@ public partial class PresetCard : IDisposable
                             {
                                 ImGui.TextUnformatted("•");
                                 ImGui.SameLine(0, 5);
-                                ImGui.TextUnformatted(_textService.Translate("PortraitHelperWindows.PresetCard.Tooltip.ElementsNotApplied.PoseNotUnlocked", _bannerUtils.GetBannerTimelineName(_preset.Preset!.BannerTimeline)));
+                                ImGui.TextUnformatted(_textService.Translate("PortraitHelperWindows.PresetCard.Tooltip.ElementsNotApplied.PoseNotUnlocked", _bannerService.GetBannerTimelineName(_preset.Preset!.BannerTimeline)));
                             }
 
                             if (!_isBannerBgUnlocked && _excelService.TryGetRow<BannerBg>(_preset.Preset!.BannerBg, out var bannerBgRow))
@@ -262,7 +264,7 @@ public partial class PresetCard : IDisposable
 
             if (ImGui.IsMouseDoubleClicked(ImGuiMouseButton.Left))
             {
-                _preset.Preset?.ToState(_logger, _bannerUtils, ImportFlags.All);
+                _preset.Preset?.ToState(_logger, _bannerService, ImportFlags.All);
                 overlay.MenuBar.CloseOverlays();
             }
         }
@@ -275,7 +277,7 @@ public partial class PresetCard : IDisposable
 
         if (ImGui.MenuItem(_textService.Translate("PortraitHelperWindows.PresetCard.ContextMenu.LoadPreset.Label")))
         {
-            _preset.Preset?.ToState(_logger, _bannerUtils, ImportFlags.All);
+            _preset.Preset?.ToState(_logger, _bannerService, ImportFlags.All);
             overlay.MenuBar.CloseOverlays();
         }
 
@@ -283,7 +285,7 @@ public partial class PresetCard : IDisposable
             overlay.EditPresetDialog.Open(_preset);
 
         if (ImGui.MenuItem(_textService.Translate("PortraitHelperWindows.PresetCard.ContextMenu.ExportToClipboard.Label")))
-            _preset.Preset?.ToClipboard(_logger);
+            Task.Run(() => _clipboardService.SetClipboardPortraitPreset(_preset.Preset));
 
         if (_image != null && ImGui.BeginMenu(_textService.Translate("PortraitHelperWindows.PresetCard.ContextMenu.CopyImage.Label")))
         {
@@ -366,7 +368,7 @@ public partial class PresetCard : IDisposable
             }
         }
 
-        await ClipboardUtils.SetClipboardImage(tempImage);
+        await _clipboardService.SetClipboardImage(tempImage);
     }
 
     private void Update(float scale)
@@ -381,7 +383,7 @@ public partial class PresetCard : IDisposable
 
             if (DateTime.Now - _lastTextureCheck > TimeSpan.FromSeconds(1))
             {
-                var thumbPath = _pluginInterface.GetPortraitThumbnailPath(_preset.Id);
+                var thumbPath = _bannerService.GetPortraitThumbnailPath(_preset.Id);
 
                 if (File.Exists(thumbPath))
                 {

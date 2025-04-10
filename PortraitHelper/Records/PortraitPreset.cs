@@ -9,10 +9,7 @@ using HaselCommon.Extensions.Math;
 using Microsoft.Extensions.Logging;
 using PortraitHelper.Enums;
 using PortraitHelper.JsonConverters;
-using PortraitHelper.Utils;
-using Windows.Win32;
-using Windows.Win32.Foundation;
-using Windows.Win32.System.Ole;
+using PortraitHelper.Services;
 
 namespace PortraitHelper.Records;
 
@@ -202,27 +199,6 @@ public sealed record PortraitPreset
         return preset;
     }
 
-    public async void ToClipboard(ILogger logger)
-    {
-        await ClipboardUtils.OpenClipboard();
-        try
-        {
-            PInvoke.EmptyClipboard();
-
-            var clipboardText = Marshal.StringToHGlobalAnsi(ToExportedString());
-            if (PInvoke.SetClipboardData((uint)CLIPBOARD_FORMAT.CF_TEXT, (HANDLE)clipboardText) != 0)
-                ClipboardUtils.ClipboardPreset = this;
-        }
-        catch (Exception e)
-        {
-            logger.LogError(e, "Error during PortraitPreset.ToClipboard");
-        }
-        finally
-        {
-            PInvoke.CloseClipboard();
-        }
-    }
-
     public static unsafe PortraitPreset? FromState()
     {
         var state = AgentBannerEditor.Instance()->EditorState;
@@ -238,7 +214,7 @@ public sealed record PortraitPreset
         return preset;
     }
 
-    public unsafe void ToState(ILogger logger, BannerUtils bannerUtils, ImportFlags importFlags)
+    public unsafe void ToState(ILogger logger, BannerService bannerUtils, ImportFlags importFlags)
     {
         if (!TryGetAddon<AddonBannerEditor>(AgentId.BannerEditor, out var addonBannerEditor))
             return;

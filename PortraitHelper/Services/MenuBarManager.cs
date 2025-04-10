@@ -5,7 +5,6 @@ using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using HaselCommon.Services;
 using Microsoft.Extensions.Logging;
 using PortraitHelper.Records;
-using PortraitHelper.Utils;
 using PortraitHelper.Windows;
 
 namespace PortraitHelper.Services;
@@ -17,6 +16,7 @@ public unsafe partial class MenuBarManager : IDisposable
     private readonly IGameInteropProvider _gameInteropProvider;
     private readonly AddonObserver _addonObserver;
     private readonly MenuBar _menuBar;
+    private readonly ClipboardService _clipboardService;
 
     private Hook<UIClipboard.Delegates.OnClipboardDataChanged>? _onClipboardDataChangedHook;
 
@@ -69,9 +69,9 @@ public unsafe partial class MenuBarManager : IDisposable
 
         try
         {
-            ClipboardUtils.ClipboardPreset = PortraitPreset.FromExportedString(uiClipboard->Data.SystemClipboardText.ToString());
-            if (ClipboardUtils.ClipboardPreset != null)
-                _logger.LogDebug("Parsed ClipboardPreset: {ClipboardPreset}", ClipboardUtils.ClipboardPreset);
+            _clipboardService.ClipboardPreset = PortraitPreset.FromExportedString(uiClipboard->Data.SystemClipboardText.ToString());
+            if (_clipboardService.ClipboardPreset != null)
+                _logger.LogDebug("Parsed ClipboardPreset: {ClipboardPreset}", _clipboardService.ClipboardPreset);
         }
         catch (Exception ex)
         {

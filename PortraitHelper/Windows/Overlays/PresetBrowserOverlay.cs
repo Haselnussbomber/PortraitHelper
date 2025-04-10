@@ -9,6 +9,7 @@ using HaselCommon.Gui;
 using HaselCommon.Services;
 using ImGuiNET;
 using Microsoft.Extensions.Logging;
+using PortraitHelper.Config;
 using PortraitHelper.Records;
 using PortraitHelper.Windows.Dialogs;
 
@@ -21,6 +22,7 @@ public unsafe partial class PresetBrowserOverlay : Overlay
 
     private readonly ILogger<PresetBrowserOverlay> _logger;
     private readonly TextService _textService;
+    private readonly PluginConfig _pluginConfig;
 
     private int _reorderTagOldIndex = -1;
     private int _reorderTagNewIndex = -1;
@@ -83,7 +85,7 @@ public unsafe partial class PresetBrowserOverlay : Overlay
 
     private void DrawSidebarTag(SavedPresetTag tag, ref bool removeUnusedTags)
     {
-        var count = PluginConfig.Presets.Count(preset => preset.Tags.Contains(tag.Id));
+        var count = _pluginConfig.Presets.Count(preset => preset.Tags.Contains(tag.Id));
 
         var treeNodeFlags =
             ImGuiTreeNodeFlags.SpanAvailWidth |
@@ -124,19 +126,19 @@ public unsafe partial class PresetBrowserOverlay : Overlay
                 if (payload.NativePtr != null && payload.IsDelivery() && payload.Data != 0)
                 {
                     var tagId = MemoryHelper.Read<Guid>(payload.Data).ToString();
-                    _reorderTagOldIndex = PluginConfig.PresetTags.AsEnumerable().IndexOf((tag) => tag.Id.ToString() == tagId);
-                    _reorderTagNewIndex = PluginConfig.PresetTags.IndexOf(tag);
+                    _reorderTagOldIndex = _pluginConfig.PresetTags.AsEnumerable().IndexOf((tag) => tag.Id.ToString() == tagId);
+                    _reorderTagNewIndex = _pluginConfig.PresetTags.IndexOf(tag);
                 }
 
                 payload = ImGui.AcceptDragDropPayload("MovePresetCard");
                 if (payload.NativePtr != null && payload.IsDelivery() && payload.Data != 0)
                 {
                     var presetId = MemoryHelper.Read<Guid>(payload.Data).ToString();
-                    var preset = PluginConfig.Presets.FirstOrDefault((preset) => preset?.Id.ToString() == presetId, null);
+                    var preset = _pluginConfig.Presets.FirstOrDefault((preset) => preset?.Id.ToString() == presetId, null);
                     if (preset != null)
                     {
                         preset.Tags.Add(tag.Id);
-                        PluginConfig.Save();
+                        _pluginConfig.Save();
                     }
                 }
             }
@@ -199,15 +201,15 @@ public unsafe partial class PresetBrowserOverlay : Overlay
 
         DrawAllTag(ref removeUnusedTags);
 
-        foreach (var tag in PluginConfig.PresetTags)
+        foreach (var tag in _pluginConfig.PresetTags)
             DrawSidebarTag(tag, ref removeUnusedTags);
 
-        if (_reorderTagOldIndex > -1 && _reorderTagOldIndex < PluginConfig.PresetTags.Count && _reorderTagNewIndex > -1 && _reorderTagNewIndex < PluginConfig.PresetTags.Count)
+        if (_reorderTagOldIndex > -1 && _reorderTagOldIndex < _pluginConfig.PresetTags.Count && _reorderTagNewIndex > -1 && _reorderTagNewIndex < _pluginConfig.PresetTags.Count)
         {
-            var item = PluginConfig.PresetTags[_reorderTagOldIndex];
-            PluginConfig.PresetTags.RemoveAt(_reorderTagOldIndex);
-            PluginConfig.PresetTags.Insert(_reorderTagNewIndex, item);
-            PluginConfig.Save();
+            var item = _pluginConfig.PresetTags[_reorderTagOldIndex];
+            _pluginConfig.PresetTags.RemoveAt(_reorderTagOldIndex);
+            _pluginConfig.PresetTags.Insert(_reorderTagNewIndex, item);
+            _pluginConfig.Save();
             _reorderTagOldIndex = -1;
             _reorderTagNewIndex = -1;
         }
@@ -225,7 +227,7 @@ public unsafe partial class PresetBrowserOverlay : Overlay
             ImGuiTreeNodeFlags.Leaf |
             (SelectedTagId == null ? ImGuiTreeNodeFlags.Selected : ImGuiTreeNodeFlags.None);
 
-        using var allTreeNode = ImRaii.TreeNode(_textService.Translate("PortraitHelperWindows.PresetBrowserOverlay.Sidebar.AllTags.Title", PluginConfig.Presets.Count.ToString()) + $"##PresetBrowser_SideBar_All", treeNodeFlags);
+        using var allTreeNode = ImRaii.TreeNode(_textService.Translate("PortraitHelperWindows.PresetBrowserOverlay.Sidebar.AllTags.Title", _pluginConfig.Presets.Count.ToString()) + $"##PresetBrowser_SideBar_All", treeNodeFlags);
         if (!allTreeNode)
             return;
 
@@ -254,11 +256,11 @@ public unsafe partial class PresetBrowserOverlay : Overlay
 
     private void RemoveUnusedTags()
     {
-        foreach (var tag in PluginConfig.PresetTags.ToArray())
+        foreach (var tag in _pluginConfig.PresetTags.ToArray())
         {
             var isUsed = false;
 
-            foreach (var preset in PluginConfig.Presets)
+            foreach (var preset in _pluginConfig.Presets)
             {
                 if (preset.Tags.Contains(tag.Id))
                 {
@@ -268,10 +270,10 @@ public unsafe partial class PresetBrowserOverlay : Overlay
             }
 
             if (!isUsed)
-                PluginConfig.PresetTags.Remove(tag);
+                _pluginConfig.PresetTags.Remove(tag);
         }
 
-        PluginConfig.Save();
+        _pluginConfig.Save();
     }
 
     private void DrawPresetBrowserContent()
@@ -297,7 +299,7 @@ public unsafe partial class PresetBrowserOverlay : Overlay
         using var indentSpacing = ImRaii.PushStyle(ImGuiStyleVar.IndentSpacing, style.ItemSpacing.X);
         using var indent = ImRaii.PushIndent();
 
-        var presetCards = PluginConfig.Presets
+        var presetCards = _pluginConfig.Presets
             .Where((preset) => (SelectedTagId == null || preset.Tags.Contains(SelectedTagId.Value)) && preset.Preset != null)
             .Select((preset) =>
             {
