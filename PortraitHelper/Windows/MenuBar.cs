@@ -118,7 +118,7 @@ public unsafe partial class MenuBar : SimpleWindow
         if (_initialPreset == null)
         {
             ImGui.SetCursorPosY(ImGui.GetCursorPos().Y + 2);
-            ImGui.TextUnformatted(_textService.Translate("PortraitHelperWindows.MenuBar.Initializing"));
+            ImGui.TextUnformatted(_textService.Translate("MenuBar.Initializing"));
             UpdatePosition();
             return;
         }
@@ -138,17 +138,17 @@ public unsafe partial class MenuBar : SimpleWindow
         }
 
         ImGui.SameLine();
-        if (ImGuiUtils.IconButton("Copy", FontAwesomeIcon.Copy, _textService.Translate("PortraitHelperWindows.MenuBar.ExportToClipboard.Label"))) // GetAddonText(100) ?? "Copy"
+        if (ImGuiUtils.IconButton("Copy", FontAwesomeIcon.Copy, _textService.Translate("MenuBar.ExportToClipboard.Label"))) // GetAddonText(100) ?? "Copy"
             Task.Run(() => _clipboardService.SetClipboardPortraitPreset(PortraitPreset.FromState()));
 
         ImGui.SameLine();
         if (_clipboardService.ClipboardPreset == null)
         {
-            ImGuiUtils.IconButton("Paste", FontAwesomeIcon.Paste, _textService.Translate("PortraitHelperWindows.MenuBar.ImportFromClipboard.Label"), disabled: true); // GetAddonText(101) ?? "Paste"
+            ImGuiUtils.IconButton("Paste", FontAwesomeIcon.Paste, _textService.Translate("MenuBar.ImportFromClipboard.Label"), disabled: true); // GetAddonText(101) ?? "Paste"
         }
         else
         {
-            if (ImGuiUtils.IconButton("Paste", FontAwesomeIcon.Paste, _textService.Translate("PortraitHelperWindows.MenuBar.ImportFromClipboardAllSettings.Label")))
+            if (ImGuiUtils.IconButton("Paste", FontAwesomeIcon.Paste, _textService.Translate("MenuBar.ImportFromClipboardAllSettings.Label")))
             {
                 _clipboardService.ClipboardPreset.ToState(_logger, _bannerService, ImportFlags.All);
                 CloseOverlays();
@@ -158,7 +158,7 @@ public unsafe partial class MenuBar : SimpleWindow
         ImGui.SameLine();
         if (_clipboardService.ClipboardPreset == null)
         {
-            ImGuiUtils.IconButton("ViewModeAdvancedImport", FontAwesomeIcon.FileImport, _textService.Translate("PortraitHelperWindows.MenuBar.ToggleAdvancedImportMode.Label"), disabled: true);
+            ImGuiUtils.IconButton("ViewModeAdvancedImport", FontAwesomeIcon.FileImport, _textService.Translate("MenuBar.ToggleAdvancedImportMode.Label"), disabled: true);
         }
         else if (_advancedImportOverlay != null && _advancedImportOverlay.IsOpen)
         {
@@ -166,14 +166,14 @@ public unsafe partial class MenuBar : SimpleWindow
                                      .Push(ImGuiCol.ButtonActive, 0xFFB06C2B)
                                      .Push(ImGuiCol.ButtonHovered, 0xFFCE8231);
 
-            if (ImGuiUtils.IconButton("ViewModeNormal", FontAwesomeIcon.FileImport, _textService.Translate("PortraitHelperWindows.MenuBar.ToggleAdvancedImportMode.Label")))
+            if (ImGuiUtils.IconButton("ViewModeNormal", FontAwesomeIcon.FileImport, _textService.Translate("MenuBar.ToggleAdvancedImportMode.Label")))
             {
                 _advancedImportOverlay?.Close();
                 _advancedImportOverlay?.Dispose();
                 _advancedImportOverlay = null;
             }
         }
-        else if (ImGuiUtils.IconButton("ViewModeAdvancedImport", FontAwesomeIcon.FileImport, _textService.Translate("PortraitHelperWindows.MenuBar.ToggleAdvancedImportMode.Label")))
+        else if (ImGuiUtils.IconButton("ViewModeAdvancedImport", FontAwesomeIcon.FileImport, _textService.Translate("MenuBar.ToggleAdvancedImportMode.Label")))
         {
             CloseOverlays();
             _advancedImportOverlay ??= _serviceScope!.ServiceProvider.GetRequiredService<AdvancedImportOverlay>();
@@ -187,14 +187,14 @@ public unsafe partial class MenuBar : SimpleWindow
                                      .Push(ImGuiCol.ButtonActive, 0xFFB06C2B)
                                      .Push(ImGuiCol.ButtonHovered, 0xFFCE8231);
 
-            if (ImGuiUtils.IconButton("ViewModeNormal", FontAwesomeIcon.FilePen, _textService.Translate("PortraitHelperWindows.MenuBar.ToggleAdvancedEditMode.Label")))
+            if (ImGuiUtils.IconButton("ViewModeNormal", FontAwesomeIcon.FilePen, _textService.Translate("MenuBar.ToggleAdvancedEditMode.Label")))
             {
                 _advancedEditOverlay?.Close();
                 _advancedEditOverlay?.Dispose();
                 _advancedEditOverlay = null;
             }
         }
-        else if (ImGuiUtils.IconButton("ViewModeAdvancedEdit", FontAwesomeIcon.FilePen, _textService.Translate("PortraitHelperWindows.MenuBar.ToggleAdvancedEditMode.Label")))
+        else if (ImGuiUtils.IconButton("ViewModeAdvancedEdit", FontAwesomeIcon.FilePen, _textService.Translate("MenuBar.ToggleAdvancedEditMode.Label")))
         {
             CloseOverlays();
             _advancedEditOverlay ??= _serviceScope!.ServiceProvider.GetRequiredService<AdvancedEditOverlay>();
@@ -208,7 +208,7 @@ public unsafe partial class MenuBar : SimpleWindow
         // ----
 
         ImGui.SameLine();
-        if (ImGuiUtils.IconButton("SaveAsPreset", FontAwesomeIcon.Download, _textService.Translate("PortraitHelperWindows.MenuBar.SaveAsPreset.Label")))
+        if (ImGuiUtils.IconButton("SaveAsPreset", FontAwesomeIcon.Download, _textService.Translate("MenuBar.SaveAsPreset.Label")))
         {
             _createPresetDialog.Open(_portraitName, PortraitPreset.FromState(), _bannerService.GetCurrentCharaViewImage());
         }
@@ -220,14 +220,14 @@ public unsafe partial class MenuBar : SimpleWindow
                                      .Push(ImGuiCol.ButtonActive, 0xFFB06C2B)
                                      .Push(ImGuiCol.ButtonHovered, 0xFFCE8231);
 
-            if (ImGuiUtils.IconButton("ViewModeNormal2", FontAwesomeIcon.List, _textService.Translate("PortraitHelperWindows.MenuBar.TogglePresetBrowser.Label")))
+            if (ImGuiUtils.IconButton("ViewModeNormal2", FontAwesomeIcon.List, _textService.Translate("MenuBar.TogglePresetBrowser.Label")))
             {
                 _presetBrowserOverlay?.Close();
                 _presetBrowserOverlay?.Dispose();
                 _presetBrowserOverlay = null;
             }
         }
-        else if (ImGuiUtils.IconButton("ViewModePresetBrowser", FontAwesomeIcon.List, _textService.Translate("PortraitHelperWindows.MenuBar.TogglePresetBrowser.Label")))
+        else if (ImGuiUtils.IconButton("ViewModePresetBrowser", FontAwesomeIcon.List, _textService.Translate("MenuBar.TogglePresetBrowser.Label")))
         {
             CloseOverlays();
             _presetBrowserOverlay ??= _serviceScope!.ServiceProvider.GetRequiredService<PresetBrowserOverlay>();
@@ -247,7 +247,7 @@ public unsafe partial class MenuBar : SimpleWindow
                                      .Push(ImGuiCol.ButtonActive, 0xFFB06C2B)
                                      .Push(ImGuiCol.ButtonHovered, 0xFFCE8231);
 
-            if (ImGuiUtils.IconButton("ToggleAlignmentToolOff", FontAwesomeIcon.Hashtag, _textService.Translate("PortraitHelperWindows.MenuBar.ToggleAlignmentTool.Label.CloseSettings")))
+            if (ImGuiUtils.IconButton("ToggleAlignmentToolOff", FontAwesomeIcon.Hashtag, _textService.Translate("MenuBar.ToggleAlignmentTool.Label.CloseSettings")))
             {
                 if (ImGui.IsKeyDown(ImGuiKey.LeftShift) || ImGui.IsKeyDown(ImGuiKey.RightShift))
                 {
@@ -262,7 +262,7 @@ public unsafe partial class MenuBar : SimpleWindow
                 }
             }
         }
-        else if (ImGuiUtils.IconButton("ToggleAlignmentToolOn", FontAwesomeIcon.Hashtag, _textService.Translate("PortraitHelperWindows.MenuBar.ToggleAlignmentTool.Label.OpenSettings")))
+        else if (ImGuiUtils.IconButton("ToggleAlignmentToolOn", FontAwesomeIcon.Hashtag, _textService.Translate("MenuBar.ToggleAlignmentTool.Label.OpenSettings")))
         {
             if (ImGui.IsKeyDown(ImGuiKey.LeftShift) || ImGui.IsKeyDown(ImGuiKey.RightShift))
             {
@@ -346,7 +346,7 @@ public unsafe partial class MenuBar : SimpleWindow
                         drawList.AddLine(
                             position + new Vector2(i * x, 0),
                             position + new Vector2(i * x, size.Y),
-                            _pluginConfig.AlignmentToolVerticalColor
+                            _pluginConfig.AlignmentToolVerticalColor.ToUInt()
                         );
                     }
                 }
@@ -360,7 +360,7 @@ public unsafe partial class MenuBar : SimpleWindow
                         drawList.AddLine(
                             position + new Vector2(0, i * y),
                             position + new Vector2(size.X, i * y),
-                            _pluginConfig.AlignmentToolHorizontalColor
+                            _pluginConfig.AlignmentToolHorizontalColor.ToUInt()
                         );
                     }
                 }

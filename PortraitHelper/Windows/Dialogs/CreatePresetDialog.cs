@@ -45,7 +45,7 @@ public partial class CreatePresetDialog
         if (_preset == null || _image == null)
             return;
 
-        var title = _textService.Translate("PortraitHelperWindows.CreatePresetDialog.Title");
+        var title = _textService.Translate("CreatePresetDialog.Title");
 
         if (_shouldOpen)
         {
@@ -65,7 +65,7 @@ public partial class CreatePresetDialog
 
         using var disabledDueToSaving = ImRaii.Disabled(_isSaving);
 
-        ImGui.TextUnformatted(_textService.Translate("PortraitHelperWindows.CreatePresetDialog.Name.Label"));
+        ImGui.TextUnformatted(_textService.Translate("CreatePresetDialog.Name.Label"));
         ImGui.InputText("##PresetName", ref _name, Constants.PresetNameMaxLength);
 
         var disabled = string.IsNullOrWhiteSpace(_name);

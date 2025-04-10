@@ -7,7 +7,6 @@ using Dalamud.Configuration;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
 using Dalamud.Utility;
-using HaselCommon.Graphics;
 using Microsoft.Extensions.DependencyInjection;
 using PortraitHelper.Records;
 

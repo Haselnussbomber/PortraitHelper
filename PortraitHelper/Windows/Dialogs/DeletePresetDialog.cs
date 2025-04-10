@@ -19,7 +19,6 @@ public partial class DeletePresetDialog
     private readonly TextService _textService;
     private readonly PluginConfig _pluginConfig;
     private readonly BannerService _bannerService;
-    private readonly PresetCardManager _presetCardManager;
 
     private bool _shouldOpen;
     private SavedPreset? _preset;
@@ -35,7 +34,7 @@ public partial class DeletePresetDialog
         if (_preset == null)
             return;
 
-        var title = _textService.Translate("PortraitHelperWindows.DeletePresetDialog.Title");
+        var title = _textService.Translate("DeletePresetDialog.Title");
 
         if (_shouldOpen)
         {
@@ -53,7 +52,7 @@ public partial class DeletePresetDialog
         using var modal = ImRaiiExt.PopupModal(title, ImGuiWindowFlags.AlwaysAutoResize);
         if (!modal) return;
 
-        ImGui.TextUnformatted(_textService.Translate("PortraitHelperWindows.DeletePresetDialog.Prompt", _preset.Name));
+        ImGui.TextUnformatted(_textService.Translate("DeletePresetDialog.Prompt", _preset.Name));
 
         ImGui.Spacing();
         ImGui.Separator();
@@ -84,7 +83,6 @@ public partial class DeletePresetDialog
                 }
             }
 
-            _presetCardManager.Remove(_preset.Id);
             _pluginConfig.Presets.Remove(_preset);
             _pluginConfig.Save();
 

@@ -32,7 +32,7 @@ public partial class EditPresetDialog
         if (_preset == null)
             return;
 
-        var title = _textService.Translate("PortraitHelperWindows.EditPresetDialog.Title");
+        var title = _textService.Translate("EditPresetDialog.Title");
 
         if (_shouldOpen)
         {
@@ -50,7 +50,7 @@ public partial class EditPresetDialog
         using var modal = ImRaiiExt.PopupModal(title, ImGuiWindowFlags.AlwaysAutoResize);
         if (!modal) return;
 
-        ImGui.TextUnformatted(_textService.Translate("PortraitHelperWindows.EditPresetDialog.Name.Label"));
+        ImGui.TextUnformatted(_textService.Translate("EditPresetDialog.Name.Label"));
         ImGui.InputText("##PresetName", ref _name, Constants.PresetNameMaxLength);
 
         var disabled = string.IsNullOrWhiteSpace(_name);
