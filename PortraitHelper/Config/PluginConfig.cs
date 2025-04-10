@@ -55,7 +55,13 @@ public partial class PluginConfig : IPluginConfiguration
         if (version == null)
             return new();
 
-        return JsonSerializer.Deserialize<PluginConfig>(node, SerializerOptions) ?? new();
+        var pluginConfig = JsonSerializer.Deserialize<PluginConfig>(node, SerializerOptions);
+        if (pluginConfig == null)
+            return new();
+
+        pluginConfig.Presets.RemoveAll(preset => string.IsNullOrEmpty(preset.Name) || preset.Preset == null);
+
+        return pluginConfig;
     }
 
     public void Save()
