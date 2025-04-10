@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.IO;
-using System.Numerics;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
@@ -8,6 +7,7 @@ using Dalamud.Configuration;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
 using Dalamud.Utility;
+using HaselCommon.Graphics;
 using Microsoft.Extensions.DependencyInjection;
 using PortraitHelper.Records;
 
@@ -92,9 +92,9 @@ public partial class PluginConfig
     public List<SavedPreset> Presets = [];
     public bool ShowAlignmentTool = false;
     public int AlignmentToolVerticalLines = 2;
-    public Vector4 AlignmentToolVerticalColor = new(0, 0, 0, 1f);
+    public Color AlignmentToolVerticalColor = new(0, 0, 0, 1f);
     public int AlignmentToolHorizontalLines = 2;
-    public Vector4 AlignmentToolHorizontalColor = new(0, 0, 0, 1f);
+    public Color AlignmentToolHorizontalColor = new(0, 0, 0, 1f);
 
     public bool NotifyGearChecksumMismatch = true;
 }

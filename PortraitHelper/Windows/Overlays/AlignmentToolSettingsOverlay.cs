@@ -1,3 +1,4 @@
+using System.Numerics;
 using Dalamud.Interface.Utility.Raii;
 using HaselCommon.Gui;
 using HaselCommon.Services;
@@ -38,19 +39,23 @@ public unsafe partial class AlignmentToolSettingsOverlay : Overlay
         ImGui.Indent();
 
         changed |= ImGui.SliderInt("##Vertical Lines", ref _pluginConfig.AlignmentToolVerticalLines, 0, 10);
-        changed |= ImGui.ColorEdit4("##Vertical Color", ref _pluginConfig.AlignmentToolVerticalColor);
+        var vec4Vertical = (Vector4)_pluginConfig.AlignmentToolVerticalColor;
+        changed |= ImGui.ColorEdit4("##Vertical Color", ref vec4Vertical);
 
         ImGui.Unindent();
         ImGui.TextUnformatted(_textService.Translate("PortraitHelperWindows.AlignmentToolSettingsOverlay.HorizontalLines.Label"));
         ImGui.Indent();
 
         changed |= ImGui.SliderInt("##Horizontal Lines", ref _pluginConfig.AlignmentToolHorizontalLines, 0, 10);
-        changed |= ImGui.ColorEdit4("##Horizontal Color", ref _pluginConfig.AlignmentToolHorizontalColor);
+        var vec4Horizontal = (Vector4)_pluginConfig.AlignmentToolHorizontalColor;
+        changed |= ImGui.ColorEdit4("##Horizontal Color", ref vec4Horizontal);
 
         ImGui.Unindent();
 
         if (changed)
         {
+            _pluginConfig.AlignmentToolVerticalColor = new(vec4Vertical);
+            _pluginConfig.AlignmentToolHorizontalColor = new(vec4Horizontal);
             _pluginConfig.Save();
         }
     }
