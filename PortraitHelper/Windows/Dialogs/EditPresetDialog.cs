@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
-using Dalamud.Interface.Utility.Raii;
 using HaselCommon.Services;
 using ImGuiNET;
 using PortraitHelper.Config;
@@ -18,7 +15,6 @@ public partial class EditPresetDialog : ConfirmationDialog
     private ConfirmationButton _saveButton;
     private string? _name;
     private SavedPreset? _preset;
-    private readonly List<Guid> _tags = [];
 
     [AutoPostConstruct]
     private void Initialize()
@@ -33,8 +29,6 @@ public partial class EditPresetDialog : ConfirmationDialog
     {
         _preset = preset;
         _name = preset.Name;
-        _tags.Clear();
-        _tags.AddRange(preset.Tags);
         Show();
     }
 
@@ -43,7 +37,6 @@ public partial class EditPresetDialog : ConfirmationDialog
         Hide();
         _name = null;
         _preset = null;
-        _tags.Clear();
     }
 
     public override bool DrawCondition()
@@ -63,40 +56,6 @@ public partial class EditPresetDialog : ConfirmationDialog
             OnSave();
         }
 
-        if (_pluginConfig.PresetTags.Count != 0)
-        {
-            ImGui.Spacing();
-            ImGui.TextUnformatted(_textService.Translate("PortraitHelperWindows.EditPresetDialog.Tags.Label"));
-
-            var tagNames = _tags!
-                .Select(id => _pluginConfig.PresetTags.FirstOrDefault((t) => t.Id == id)?.Name ?? string.Empty)
-                .Where(name => !string.IsNullOrEmpty(name));
-
-            var preview = tagNames.Any() ? string.Join(", ", tagNames) : _textService.Translate("PortraitHelperWindows.EditPresetDialog.Tags.None");
-
-            ImGui.Spacing();
-            using var tagsCombo = ImRaii.Combo("##PresetTag", preview, ImGuiComboFlags.HeightLarge);
-            if (tagsCombo)
-            {
-                foreach (var tag in _pluginConfig.PresetTags)
-                {
-                    var isSelected = _tags!.Contains(tag.Id);
-
-                    if (ImGui.Selectable($"{tag.Name}##PresetTag{tag.Id}", isSelected))
-                    {
-                        if (isSelected)
-                        {
-                            _tags.Remove(tag.Id);
-                        }
-                        else
-                        {
-                            _tags.Add(tag.Id);
-                        }
-                    }
-                }
-            }
-        }
-
         _saveButton.Disabled = disabled;
     }
 
@@ -109,10 +68,6 @@ public partial class EditPresetDialog : ConfirmationDialog
         }
 
         _preset.Name = _name.Trim();
-        _preset.Tags.Clear();
-
-        foreach (var tag in _tags)
-            _preset.Tags.Add(tag);
 
         _pluginConfig.Save();
 

@@ -1,7 +1,4 @@
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Dalamud.Interface.Utility.Raii;
 using Dalamud.Plugin.Services;
 using HaselCommon.Services;
 using ImGuiNET;
@@ -28,7 +25,6 @@ public partial class CreatePresetDialog : ConfirmationDialog
     private string? _name;
     private PortraitPreset? _preset;
     private Image<Bgra32>? _image;
-    private HashSet<Guid>? _tags;
 
     [AutoPostConstruct]
     private void Initialize()
@@ -43,7 +39,6 @@ public partial class CreatePresetDialog : ConfirmationDialog
         _name = name;
         _preset = preset;
         _image = image;
-        _tags = [];
         Show();
     }
 
@@ -54,11 +49,10 @@ public partial class CreatePresetDialog : ConfirmationDialog
         _preset = null;
         _image?.Dispose();
         _image = null;
-        _tags = null;
     }
 
     public override bool DrawCondition()
-        => base.DrawCondition() && _name != null && _preset != null && _image != null && _tags != null;
+        => base.DrawCondition() && _name != null && _preset != null && _image != null;
 
     public override void InnerDraw()
     {
@@ -70,40 +64,6 @@ public partial class CreatePresetDialog : ConfirmationDialog
         if (!disabled && (ImGui.IsKeyPressed(ImGuiKey.Enter) || ImGui.IsKeyPressed(ImGuiKey.KeypadEnter)))
         {
             OnSave();
-        }
-
-        if (_pluginConfig.PresetTags.Count != 0)
-        {
-            ImGui.Spacing();
-            ImGui.TextUnformatted(_textService.Translate("PortraitHelperWindows.CreatePresetDialog.Tags.Label"));
-
-            var tagNames = _tags!
-                .Select(id => _pluginConfig.PresetTags.FirstOrDefault((t) => t.Id == id)?.Name ?? string.Empty)
-                .Where(name => !string.IsNullOrEmpty(name));
-
-            var preview = tagNames.Any() ? string.Join(", ", tagNames) : _textService.Translate("PortraitHelperWindows.CreatePresetDialog.Tags.None");
-
-            ImGui.Spacing();
-            using var tagsCombo = ImRaii.Combo("##PresetTag", preview, ImGuiComboFlags.HeightLarge);
-            if (tagsCombo)
-            {
-                foreach (var tag in _pluginConfig.PresetTags)
-                {
-                    var isSelected = _tags!.Contains(tag.Id);
-
-                    if (ImGui.Selectable($"{tag.Name}##PresetTag{tag.Id}", isSelected))
-                    {
-                        if (isSelected)
-                        {
-                            _tags.Remove(tag.Id);
-                        }
-                        else
-                        {
-                            _tags.Add(tag.Id);
-                        }
-                    }
-                }
-            }
         }
 
         _saveButton.Disabled = disabled;
@@ -137,7 +97,7 @@ public partial class CreatePresetDialog : ConfirmationDialog
                 ColorType = PngColorType.Rgb // no need for alpha channel
             });
 
-            _pluginConfig.Presets.Insert(0, new(guid, _name.Trim(), _preset, _tags!));
+            _pluginConfig.Presets.Insert(0, new(guid, _name.Trim(), _preset));
             _pluginConfig.Save();
 
             Close();

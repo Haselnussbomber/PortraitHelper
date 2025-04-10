@@ -46,26 +46,6 @@
     "de": "Name für die neue Vorlage:",
     "zh": "新预设的名称："
   },
-  "PortraitHelperWindows.CreatePresetDialog.Tags.Label": {
-    "en": "Select Tags (optional):",
-    "de": "Tags auswählen (optional):",
-    "zh": "选择标签（可选）："
-  },
-  "PortraitHelperWindows.CreatePresetDialog.Tags.None": {
-    "en": "None",
-    "de": "Kein Tag",
-    "zh": "无"
-  },
-  "PortraitHelperWindows.CreateTagDialog.Title": {
-    "en": "Create Tag",
-    "de": "Tag erstellen",
-    "zh": "创建标签"
-  },
-  "PortraitHelperWindows.CreateTagDialog.Name.Label": {
-    "en": "Name for the new tag:",
-    "de": "Name für den neuen Tag:",
-    "zh": "新标签的名称："
-  },
   "PortraitHelperWindows.DeletePresetDialog.Title": {
     "en": "Delete Preset",
     "de": "Vorlage löschen",
@@ -76,21 +56,6 @@
     "de": "Möchtest du wirklich die Vorlage \"{0}\" löschen?",
     "zh": "你真的要删除预设“{0}”吗？"
   },
-  "PortraitHelperWindows.DeleteTagDialog.Title": {
-    "en": "Delete Tag",
-    "de": "Tag löschen",
-    "zh": "删除标签"
-  },
-  "PortraitHelperWindows.DeleteTagDialog.Prompt": {
-    "en": "Do you really want to delete the tag \"{0}\"?",
-    "de": "Möchtest du wirklich den Tag \"{0}\" löschen?",
-    "zh": "你真的要删除标签“{0}”吗？"
-  },
-  "PortraitHelperWindows.DeleteTagDialog.DeletePortraitsToo.Label": {
-    "en": "Delete portraits too",
-    "de": "Portraits auch löschen",
-    "zh": "同时删除肖像"
-  },
   "PortraitHelperWindows.EditPresetDialog.Title": {
     "en": "Edit Preset",
     "de": "Vorlage bearbeiten",
@@ -99,25 +64,6 @@
   "PortraitHelperWindows.EditPresetDialog.Name.Label": {
     "en": "Name:",
     "zh": "名称："
-  },
-  "PortraitHelperWindows.EditPresetDialog.Tags.Label": {
-    "en": "Tags:",
-    "zh": "标签："
-  },
-  "PortraitHelperWindows.EditPresetDialog.Tags.None": {
-    "en": "None",
-    "de": "Kein Tag",
-    "zh": "无"
-  },
-  "PortraitHelperWindows.RenameTagDialog.Title": {
-    "en": "Rename Tag",
-    "de": "Tag umbenennen",
-    "zh": "重命名标签"
-  },
-  "PortraitHelperWindows.RenameTagDialog.Name.Label": {
-    "en": "Enter a new name for tag \"{0}\":",
-    "de": "Neuer Name für den Tag \"{0}\":",
-    "zh": "为标签“{0}”输入一个新名称："
   },
   "AdvancedEditOverlay.Title": {
     "en": "[HaselTweaks] Portrait Helper: Advanced Edit",
@@ -263,40 +209,6 @@
     "en": "[HaselTweaks] Portrait Helper: Preset Browser",
     "de": "[HaselTweaks] Portrait Helper: Vorlagen-Browser",
     "zh": "[HaselTweaks] 肖像助手：预设浏览器"
-  },
-  "PortraitHelperWindows.PresetBrowserOverlay.MovingTag.Tooltip": {
-    "en": "Moving \"{0}\"",
-    "de": "Verschiebe \"{0}\"",
-    "zh": "移动“{0}”"
-  },
-  "PortraitHelperWindows.PresetBrowserOverlay.ContextMenu.CreateTag.Label": {
-    "en": "Create Tag",
-    "de": "Tag erstellen",
-    "zh": "创建标签"
-  },
-  "PortraitHelperWindows.PresetBrowserOverlay.ContextMenu.RenameTag.Label": {
-    "en": "Rename Tag",
-    "de": "Tag umbenennen",
-    "zh": "重命名标签"
-  },
-  "PortraitHelperWindows.PresetBrowserOverlay.ContextMenu.RemoveTag.Label": {
-    "en": "Remove Tag",
-    "de": "Tag löschen",
-    "zh": "移除标签"
-  },
-  "PortraitHelperWindows.PresetBrowserOverlay.ContextMenu.RemoveUnusedTags.Label": {
-    "en": "Remove unused Tags",
-    "de": "Ungenutzte Tags löschen",
-    "zh": "移除未使用的标签"
-  },
-  "PortraitHelperWindows.PresetBrowserOverlay.Sidebar.Tags.Title": {
-    "en": "Tags",
-    "zh": "标签"
-  },
-  "PortraitHelperWindows.PresetBrowserOverlay.Sidebar.AllTags.Title": {
-    "en": "All ({0})",
-    "de": "Alle ({0})",
-    "zh": "所有（{0}）"
   },
   "PortraitHelperWindows.PresetBrowserOverlay.Sidebar.Presets.Title": {
     "en": "Presets",

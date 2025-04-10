@@ -333,7 +333,7 @@ public unsafe partial class MenuBar : SimpleWindow
             ImGui.SetNextWindowPos(position);
             ImGui.SetNextWindowSize(size);
 
-            if (!(ImGuiHelpers.GlobalScale <= 1 && (_advancedImportOverlay != null && _advancedImportOverlay.IsOpen || _presetBrowserOverlay != null && _presetBrowserOverlay.IsOpen)))
+            if (!(ImGuiHelpers.GlobalScale <= 1 && ((_advancedImportOverlay != null && _advancedImportOverlay.IsOpen) || (_presetBrowserOverlay != null && _presetBrowserOverlay.IsOpen))))
             {
                 ImGui.Begin("AlignmentTool", ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoBackground | ImGuiWindowFlags.NoInputs);
 
@@ -348,7 +348,7 @@ public unsafe partial class MenuBar : SimpleWindow
                         drawList.AddLine(
                             position + new Vector2(i * x, 0),
                             position + new Vector2(i * x, size.Y),
-                            ImGui.ColorConvertFloat4ToU32(_pluginConfig.AlignmentToolVerticalColor)
+                            _pluginConfig.AlignmentToolVerticalColor
                         );
                     }
                 }
@@ -362,7 +362,7 @@ public unsafe partial class MenuBar : SimpleWindow
                         drawList.AddLine(
                             position + new Vector2(0, i * y),
                             position + new Vector2(size.X, i * y),
-                            ImGui.ColorConvertFloat4ToU32(_pluginConfig.AlignmentToolHorizontalColor)
+                            _pluginConfig.AlignmentToolHorizontalColor
                         );
                     }
                 }
