@@ -1,5 +1,8 @@
 using System.IO;
 using System.Threading.Tasks;
+using Dalamud.Hooking;
+using Dalamud.Plugin.Services;
+using FFXIVClientStructs.FFXIV.Client.UI;
 using Microsoft.Extensions.Logging;
 using PortraitHelper.Enums;
 using PortraitHelper.Records;
@@ -13,12 +16,46 @@ using Windows.Win32.System.Ole;
 namespace PortraitHelper.Services;
 
 [RegisterSingleton, AutoConstruct]
-public partial class ClipboardService
+public partial class ClipboardService : IDisposable
 {
     private readonly ILogger<ClipboardService> _logger;
+    private readonly IGameInteropProvider _gameInteropProvider;
+
+    private Hook<UIClipboard.Delegates.OnClipboardDataChanged>? _onClipboardDataChangedHook;
 
     public ImportFlags CurrentImportFlags { get; set; } = ImportFlags.All;
     public PortraitPreset? ClipboardPreset { get; set; }
+
+    [AutoPostConstruct]
+    private unsafe void Initialize()
+    {
+        _onClipboardDataChangedHook = _gameInteropProvider.HookFromAddress<UIClipboard.Delegates.OnClipboardDataChanged>(
+            UIClipboard.MemberFunctionPointers.OnClipboardDataChanged,
+            OnClipboardDataChangedDetour);
+
+        _onClipboardDataChangedHook?.Enable();
+    }
+
+    void IDisposable.Dispose()
+    {
+        _onClipboardDataChangedHook?.Dispose();
+    }
+
+    private unsafe void OnClipboardDataChangedDetour(UIClipboard* uiClipboard)
+    {
+        _onClipboardDataChangedHook!.Original(uiClipboard);
+
+        try
+        {
+            ClipboardPreset = PortraitPreset.FromExportedString(uiClipboard->Data.SystemClipboardText.ToString());
+            if (ClipboardPreset != null)
+                _logger.LogDebug("Parsed ClipboardPreset: {ClipboardPreset}", ClipboardPreset);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error reading preset");
+        }
+    }
 
     public async Task SetClipboardPortraitPreset(PortraitPreset? preset)
     {

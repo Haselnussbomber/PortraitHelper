@@ -28,7 +28,7 @@ public abstract unsafe partial class Overlay : SimpleWindow, IDisposable, IOverl
     protected uint DefaultImGuiTextColor { get; set; }
 
     public bool IsWindow { get; set; }
-    public virtual OverlayType Type => OverlayType.Window;
+    public virtual OverlayType Type => OverlayType.Full;
 
     [AutoPostConstruct]
     private void Initialize()
@@ -122,7 +122,7 @@ public abstract unsafe partial class Overlay : SimpleWindow, IDisposable, IOverl
             Flags |= ImGuiWindowFlags.NoMove;
             SizeCondition = ImGuiCond.Always;
 
-            if (Type == OverlayType.Window)
+            if (Type == OverlayType.Full)
             {
                 var windowNode = (AtkResNode*)((AtkUnitBase*)addon)->WindowNode;
                 var scale = GetNodeScale(windowNode);

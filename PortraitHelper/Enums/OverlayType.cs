@@ -2,6 +2,6 @@ namespace PortraitHelper.Enums;
 
 public enum OverlayType
 {
-    Window,
+    Full,
     LeftPane
 }
