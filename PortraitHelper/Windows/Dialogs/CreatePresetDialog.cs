@@ -23,7 +23,7 @@ public partial class CreatePresetDialog
     private readonly INotificationManager _notificationManager;
     private readonly PluginConfig _pluginConfig;
     private readonly TextService _textService;
-    private readonly BannerService _bannerService;
+    private readonly ThumbnailService _thumbnailService;
 
     private bool _shouldOpen;
     private bool _isSaving;
@@ -92,7 +92,7 @@ public partial class CreatePresetDialog
                     try
                     {
                         var guid = Guid.CreateVersion7();
-                        var thumbPath = _bannerService.GetPortraitThumbnailPath(guid);
+                        var thumbPath = _thumbnailService.GetPortraitThumbnailPath(guid);
 
                         _image.Metadata.ExifProfile ??= new();
                         _image.Metadata.ExifProfile.SetValue(ExifTag.UserComment, _preset.ToExportedString());

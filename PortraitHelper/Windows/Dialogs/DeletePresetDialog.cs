@@ -18,7 +18,7 @@ public partial class DeletePresetDialog
     private readonly INotificationManager _notificationManager;
     private readonly TextService _textService;
     private readonly PluginConfig _pluginConfig;
-    private readonly BannerService _bannerService;
+    private readonly ThumbnailService _thumbnailService;
 
     private bool _shouldOpen;
     private SavedPreset? _preset;
@@ -66,7 +66,7 @@ public partial class DeletePresetDialog
 
         if (ImGui.Button(_textService.Translate("ConfirmationButtonWindow.Delete"), new Vector2(120, 0)))
         {
-            var thumbPath = _bannerService.GetPortraitThumbnailPath(_preset.Id);
+            var thumbPath = _thumbnailService.GetPortraitThumbnailPath(_preset.Id);
             if (File.Exists(thumbPath))
             {
                 try

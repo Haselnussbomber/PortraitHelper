@@ -1,4 +1,3 @@
-using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
@@ -7,7 +6,6 @@ using Dalamud.Interface.Utility.Raii;
 using Dalamud.Memory;
 using Dalamud.Plugin.Services;
 using Dalamud.Utility;
-using HaselCommon;
 using HaselCommon.Extensions.Collections;
 using HaselCommon.Gui;
 using HaselCommon.Services;
@@ -40,7 +38,9 @@ public partial class PresetBrowserOverlay : Overlay
     private readonly PluginConfig _pluginConfig;
     private readonly TextService _textService;
     private readonly ExcelService _excelService;
+    private readonly TextureService _textureService;
     private readonly BannerService _bannerService;
+    private readonly ThumbnailService _thumbnailService;
     private readonly ClipboardService _clipboardService;
     private readonly DeletePresetDialog _deletePresetDialog;
     private readonly EditPresetDialog _editPresetDialog;
@@ -147,27 +147,26 @@ public partial class PresetBrowserOverlay : Overlay
         var cursorPos = ImGui.GetCursorPos();
         var center = cursorPos + PortraitSize * scale / 2f;
 
-        var TextureService = Service.Get<TextureService>();
-
-        TextureService.DrawIcon(190009, PortraitSize * scale);
+        _textureService.DrawIcon(190009, PortraitSize * scale);
         ImGui.SetCursorPos(cursorPos);
 
-        var path = _bannerService.GetPortraitThumbnailPath(preset.Id);
-        var imageExists = File.Exists(path);
+        var path = _thumbnailService.GetPortraitThumbnailPath(preset.Id);
 
-        if (imageExists)
+        var hasThumbnailResult = _thumbnailService.TryGetThumbnail(
+            preset.Id,
+            new((int)(PortraitSize.X * scale), (int)(PortraitSize.Y * scale)),
+            out var exists,
+            out var textureWrap,
+            out var exception);
+
+        if (hasThumbnailResult)
         {
-            var image = _textureProvider.GetFromFileAbsolute(path);
-            if (image.TryGetWrap(out var texture, out var exception))
+            if (textureWrap != null)
             {
                 ImGui.SetCursorPos(cursorPos);
-                ImGui.Image(texture.ImGuiHandle, PortraitSize * scale);
+                ImGui.Image(textureWrap.ImGuiHandle, PortraitSize * scale);
             }
-            else if (exception == null)
-            {
-                DrawLoadingSpinner(ImGui.GetWindowPos() - new Vector2(ImGui.GetScrollX(), ImGui.GetScrollY()) + center);
-            }
-            else
+            else if (exception != null)
             {
                 using var font = ImRaii.PushFont(UiBuilder.IconFont);
                 using var color = Color.Red.Push(ImGuiCol.Text);
@@ -175,30 +174,34 @@ public partial class PresetBrowserOverlay : Overlay
                 ImGui.TextUnformatted(FontAwesomeIcon.Times.ToIconString());
             }
         }
-        else
+        else if (!exists)
         {
             using var font = ImRaii.PushFont(UiBuilder.IconFont);
             using var color = Color.Red.Push(ImGuiCol.Text);
             ImGui.SetCursorPos(center - ImGui.CalcTextSize(FontAwesomeIcon.FileImage.ToIconString()) / 2f);
             ImGui.TextUnformatted(FontAwesomeIcon.FileImage.ToIconString());
         }
+        else
+        {
+            DrawLoadingSpinner(ImGui.GetWindowPos() - new Vector2(ImGui.GetScrollX(), ImGui.GetScrollY()) + center);
+        }
 
         if (bannerFrameImage != 0)
         {
             ImGui.SetCursorPos(cursorPos);
-            TextureService.DrawIcon(bannerFrameImage, PortraitSize * scale);
+            _textureService.DrawIcon(bannerFrameImage, PortraitSize * scale);
         }
 
         if (bannerDecorationImage != 0)
         {
             ImGui.SetCursorPos(cursorPos);
-            TextureService.DrawIcon(bannerDecorationImage, PortraitSize * scale);
+            _textureService.DrawIcon(bannerDecorationImage, PortraitSize * scale);
         }
 
         if (hasErrors)
         {
             ImGui.SetCursorPos(cursorPos + new Vector2(PortraitSize.X - 190, 10) * scale);
-            TextureService.Draw("ui/uld/Warning_hr1.tex", 160 * scale);
+            _textureService.Draw("ui/uld/Warning_hr1.tex", 160 * scale);
         }
 
         ImGui.SetCursorPos(cursorPos);
@@ -325,7 +328,7 @@ public partial class PresetBrowserOverlay : Overlay
         if (ImGui.MenuItem(_textService.Translate("PresetBrowserOverlay.ContextMenu.ExportToClipboard.Label")))
             Task.Run(() => _clipboardService.SetClipboardPortraitPreset(preset.Preset));
 
-        if (imageExists && ImGui.BeginMenu(_textService.Translate("PresetBrowserOverlay.ContextMenu.CopyImage.Label")))
+        if (hasThumbnailResult && ImGui.BeginMenu(_textService.Translate("PresetBrowserOverlay.ContextMenu.CopyImage.Label")))
         {
             if (ImGui.MenuItem(_textService.Translate("PresetBrowserOverlay.ContextMenu.CopyImage.Everything.Label")))
                 Task.Run(() => CopyImage(preset, path));

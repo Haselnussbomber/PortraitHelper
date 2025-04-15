@@ -22,16 +22,6 @@ public unsafe partial class BannerService
     private readonly ExcelService _excelService;
     private readonly TextService _textService;
 
-    public string GetPortraitThumbnailPath(Guid id)
-    {
-        var portraitsPath = Path.Join(_pluginInterface.ConfigDirectory.FullName, "Portraits");
-
-        if (!Directory.Exists(portraitsPath))
-            Directory.CreateDirectory(portraitsPath);
-
-        return Path.Join(portraitsPath, $"{id.ToString("D").ToLowerInvariant()}.png");
-    }
-
     public Image<Bgra32>? GetCurrentCharaViewImage()
     {
         var agent = AgentBannerEditor.Instance();
