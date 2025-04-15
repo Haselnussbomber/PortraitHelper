@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -7,24 +7,30 @@ using Dalamud.Interface.Textures;
 using Dalamud.Interface.Textures.TextureWraps;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
+using HaselCommon.Extensions.Collections;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 
 namespace PortraitHelper.Services;
 
-public record ImageResult
+public record ImageResult : IDisposable
 {
     public Guid Id { get; init; }
     public Image<Rgba32>? Image { get; set; }
     public Exception? Exception { get; set; }
+
+    void IDisposable.Dispose() => Image?.Dispose();
 }
 
-public record ThumbnailResult
+public record ThumbnailResult : IDisposable
 {
     public Guid Id { get; init; }
+    public Size Size { get; set; }
     public IDalamudTextureWrap? Texture { get; set; }
     public Exception? Exception { get; set; }
+
+    void IDisposable.Dispose() => Texture?.Dispose();
 }
 
 [RegisterSingleton, AutoConstruct]
@@ -33,35 +39,28 @@ public partial class ThumbnailService : IDisposable
     private readonly IDalamudPluginInterface _pluginInterface;
     private readonly ITextureProvider _textureProvider;
 
-    private readonly CancellationTokenSource _disposeCTS = new();
+    private readonly ConcurrentDictionary<Guid, ConfiguredTaskAwaitable> _imageTasks = [];
+    private readonly ConcurrentDictionary<Guid, ImageResult> _images = [];
 
-    private readonly Dictionary<Guid, ConfiguredTaskAwaitable> _imageTasks = [];
-    private readonly Dictionary<Guid, ImageResult> _images = [];
+    private readonly ConcurrentDictionary<Guid, ConfiguredTaskAwaitable> _thumbnailTasks = [];
+    private readonly ConcurrentDictionary<(Guid, Size), ThumbnailResult> _thumbnails = [];
 
-    private readonly Dictionary<Guid, ConfiguredTaskAwaitable> _thumbnailTasks = [];
-    private readonly Dictionary<(Guid, Size), ThumbnailResult> _thumbnails = [];
-
+    private CancellationTokenSource? _disposeCTS = new();
     private bool _disposing;
 
-    public void Dispose()
+    void IDisposable.Dispose()
     {
         _disposing = true;
-        _disposeCTS.Cancel();
-        _disposeCTS.Dispose();
+        Clear();
+    }
 
-        foreach (var result in _images.Values)
-        {
-            result.Image?.Dispose();
-        }
-
-        _images.Clear();
-
-        foreach (var result in _thumbnails.Values)
-        {
-            result.Texture?.Dispose();
-        }
-
-        _thumbnails.Clear();
+    public void Clear()
+    {
+        _disposeCTS?.Cancel();
+        _disposeCTS?.Dispose();
+        _disposeCTS = null;
+        _images.Dispose();
+        _thumbnails.Dispose();
     }
 
     public string GetPortraitThumbnailPath(Guid id)
@@ -99,10 +98,7 @@ public partial class ThumbnailService : IDisposable
 
         // -- Original Image
 
-        if (!_images.TryGetValue(id, out var imageResult))
-        {
-            _images.Add(id, imageResult = new() { Id = id });
-        }
+        var imageResult = _images.GetOrAdd(id, static id => new ImageResult { Id = id });
 
         if (imageResult.Exception != null)
         {
@@ -110,35 +106,35 @@ public partial class ThumbnailService : IDisposable
             return false;
         }
 
+        _disposeCTS ??= new();
+
         if (imageResult.Image == null)
         {
-            if (!_imageTasks.TryGetValue(id, out var imageTask))
+            _imageTasks.GetOrAdd(id, _ => Task.Run(async () =>
             {
-                imageTask = Task.Run(async () =>
+                try
                 {
-                    try
-                    {
-                        imageResult.Image = await Image.LoadAsync<Rgba32>(path, _disposeCTS.Token);
-                    }
-                    catch (Exception ex)
-                    {
-                        imageResult.Exception = ex;
-                    }
-
-                    _imageTasks.Remove(id);
-                }, _disposeCTS.Token).ConfigureAwait(false);
-
-                _imageTasks.Add(id, imageTask);
-            }
-
-            return false;
+                    imageResult.Image = await Image.LoadAsync<Rgba32>(path, _disposeCTS.Token);
+                }
+                catch (Exception ex)
+                {
+                    imageResult.Exception = ex;
+                }
+                finally
+                {
+                    _imageTasks.TryRemove(id, out var _);
+                }
+            }, _disposeCTS.Token).ConfigureAwait(false));
         }
 
         // -- Thumbnail
 
-        _thumbnails.Add((id, size), thumbnailResult = new() { Id = id });
+        if (imageResult.Image == null)
+            return false;
 
-        _thumbnailTasks.Add(id, Task.Run(() =>
+        thumbnailResult = _thumbnails.GetOrAdd((id, size), static (key) => new ThumbnailResult { Id = key.Item1, Size = key.Item2 });
+
+        _thumbnailTasks.GetOrAdd(id, _ => Task.Run(async () =>
         {
             try
             {
@@ -164,8 +160,10 @@ public partial class ThumbnailService : IDisposable
             {
                 thumbnailResult.Exception = ex;
             }
-
-            _thumbnailTasks.Remove(id);
+            finally
+            {
+                _thumbnailTasks.TryRemove(id, out var _);
+            }
         }, _disposeCTS.Token).ConfigureAwait(false));
 
         return false;

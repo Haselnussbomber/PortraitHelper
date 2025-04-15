@@ -9,6 +9,7 @@ public partial class MenuBarManager : IDisposable
 {
     private readonly AddonObserver _addonObserver;
     private readonly MenuBar _menuBar;
+    private readonly ThumbnailService _thumbnailService;
 
     [AutoPostConstruct]
     private void Initialize()
@@ -37,6 +38,9 @@ public partial class MenuBarManager : IDisposable
     private void OnAddonClose(string addonName)
     {
         if (addonName == "BannerEditor")
+        {
             _menuBar.Close();
+            _thumbnailService.Clear();
+        }
     }
 }
