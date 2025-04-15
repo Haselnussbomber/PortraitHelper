@@ -7,7 +7,7 @@ using FFXIVClientStructs.FFXIV.Component.GUI;
 using HaselCommon.Game;
 using HaselCommon.Gui;
 using HaselCommon.Services;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 using Lumina.Excel.Sheets;
 using PortraitHelper.Config;
 using PortraitHelper.Enums;
@@ -126,7 +126,7 @@ public abstract unsafe partial class Overlay : SimpleWindow, IDisposable, IOverl
             Flags |= ImGuiWindowFlags.NoSavedSettings;
             Flags |= ImGuiWindowFlags.NoDecoration;
             Flags |= ImGuiWindowFlags.NoMove;
-            SizeCondition = ImGuiCond.Always;
+            SizeConditionNew = ImGuiCond.Always;
 
             var scale = addon->Scale;
 
@@ -170,7 +170,7 @@ public abstract unsafe partial class Overlay : SimpleWindow, IDisposable, IOverl
             Flags &= ~ImGuiWindowFlags.NoMove;
             Flags &= ~ImGuiWindowFlags.AlwaysAutoResize;
 
-            SizeCondition = ImGuiCond.Appearing;
+            SizeConditionNew = ImGuiCond.Appearing;
             SizeConstraints = new WindowSizeConstraints
             {
                 MinimumSize = new Vector2(400, 500),

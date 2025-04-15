@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
+using Dalamud.Bindings.ImGui;
 using Dalamud.Interface;
 using Dalamud.Interface.Utility.Raii;
 using Dalamud.Memory;
@@ -9,7 +10,6 @@ using Dalamud.Utility;
 using HaselCommon.Extensions;
 using HaselCommon.Gui;
 using HaselCommon.Services;
-using ImGuiNET;
 using Lumina.Data.Files;
 using Lumina.Excel.Sheets;
 using Microsoft.Extensions.Logging;
@@ -102,12 +102,7 @@ public partial class PresetBrowserOverlay : Overlay
         var presetWidth = availableWidth / presetsPerRow;
         var scale = presetWidth / PortraitSize.X;
 
-        ImGuiListClipperPtr clipper;
-        unsafe
-        {
-            clipper = new ImGuiListClipperPtr(ImGuiNative.ImGuiListClipper_ImGuiListClipper());
-        }
-
+        var clipper = ImGui.ImGuiListClipper();
         var presets = _pluginConfig.Presets;
         clipper.Begin((int)Math.Ceiling(presets.Count / (float)presetsPerRow), PortraitSize.Y * scale);
         while (clipper.Step())
@@ -164,11 +159,11 @@ public partial class PresetBrowserOverlay : Overlay
             if (textureWrap != null)
             {
                 ImGui.SetCursorPos(cursorPos);
-                ImGui.Image(textureWrap.ImGuiHandle, PortraitSize * scale);
+                ImGui.Image(textureWrap.Handle, PortraitSize * scale);
             }
             else if (exception != null)
             {
-                using var font = ImRaii.PushFont(UiBuilder.IconFont);
+                using var font = ImRaii.PushFont(UiBuilder.IconFontNew);
                 using var color = Color.Red.Push(ImGuiCol.Text);
                 ImGui.SetCursorPos(center - ImGui.CalcTextSize(FontAwesomeIcon.Times.ToIconString()) / 2f);
                 ImGui.TextUnformatted(FontAwesomeIcon.Times.ToIconString());
@@ -176,7 +171,7 @@ public partial class PresetBrowserOverlay : Overlay
         }
         else if (!exists)
         {
-            using var font = ImRaii.PushFont(UiBuilder.IconFont);
+            using var font = ImRaii.PushFont(UiBuilder.IconFontNew);
             using var color = Color.Red.Push(ImGuiCol.Text);
             ImGui.SetCursorPos(center - ImGui.CalcTextSize(FontAwesomeIcon.FileImage.ToIconString()) / 2f);
             ImGui.TextUnformatted(FontAwesomeIcon.FileImage.ToIconString());
@@ -207,7 +202,7 @@ public partial class PresetBrowserOverlay : Overlay
         ImGui.SetCursorPos(cursorPos);
 
         {
-            using var Color = ImRaii.PushColor(ImGuiCol.Button, 0)
+            using var color = ImRaii.PushColor(ImGuiCol.Button, 0)
                 .Push(ImGuiCol.ButtonActive, ButtonActiveColor)
                 .Push(ImGuiCol.ButtonHovered, ButtonHoveredColor);
             using var rounding = ImRaii.PushStyle(ImGuiStyleVar.FrameRounding, 0);
@@ -226,7 +221,7 @@ public partial class PresetBrowserOverlay : Overlay
                     var bytes = preset.Id.ToByteArray();
                     fixed (byte* ptr = bytes)
                     {
-                        ImGui.SetDragDropPayload("MovePresetCard", (nint)ptr, (uint)bytes.Length);
+                        ImGui.SetDragDropPayload("MovePresetCard", ptr, (uint)bytes.Length);
                     }
                 }
             }
@@ -239,9 +234,9 @@ public partial class PresetBrowserOverlay : Overlay
                 var payload = ImGui.AcceptDragDropPayload("MovePresetCard");
                 unsafe
                 {
-                    if (payload.NativePtr != null && payload.IsDelivery() && payload.Data != 0)
+                    if (payload.IsDelivery() && payload.Data != null)
                     {
-                        var presetId = MemoryHelper.Read<Guid>(payload.Data).ToString();
+                        var presetId = MemoryHelper.Read<Guid>((nint)payload.Data).ToString();
                         var oldIndex = _pluginConfig.Presets.AsEnumerable().IndexOf((preset) => preset.Id.ToString() == presetId);
                         var newIndex = _pluginConfig.Presets.IndexOf(preset);
                         var item = _pluginConfig.Presets[oldIndex];

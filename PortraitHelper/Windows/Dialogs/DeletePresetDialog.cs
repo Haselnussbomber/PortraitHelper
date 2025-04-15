@@ -4,7 +4,7 @@ using Dalamud.Interface.Utility;
 using Dalamud.Plugin.Services;
 using HaselCommon.Gui;
 using HaselCommon.Services;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 using PortraitHelper.Config;
 using PortraitHelper.Records;
 using PortraitHelper.Services;
@@ -46,7 +46,7 @@ public partial class DeletePresetDialog
             return;
 
         // Always center this window when appearing
-        var center = ImGui.GetMainViewport().GetCenter();
+        var center = ImGui.GetMainViewport().Size / 2f;
         ImGui.SetNextWindowPos(center, ImGuiCond.Appearing, new(0.5f, 0.5f));
 
         using var modal = ImRaiiExt.PopupModal(title, ImGuiWindowFlags.AlwaysAutoResize);

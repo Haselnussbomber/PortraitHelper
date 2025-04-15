@@ -4,7 +4,7 @@ using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using FFXIVClientStructs.FFXIV.Common.Math;
 using HaselCommon.Gui;
 using HaselCommon.Services;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 using Lumina.Excel.Sheets;
 using Microsoft.Extensions.Logging;
 using PortraitHelper.Enums;
