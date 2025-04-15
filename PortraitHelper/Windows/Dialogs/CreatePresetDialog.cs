@@ -66,6 +66,10 @@ public partial class CreatePresetDialog
         using var disabledDueToSaving = ImRaii.Disabled(_isSaving);
 
         ImGui.TextUnformatted(_textService.Translate("CreatePresetDialog.Name.Label"));
+
+        if (ImGui.IsWindowAppearing())
+            ImGui.SetKeyboardFocusHere();
+
         ImGui.InputText("##PresetName", ref _name, Constants.PresetNameMaxLength);
 
         var disabled = string.IsNullOrWhiteSpace(_name);

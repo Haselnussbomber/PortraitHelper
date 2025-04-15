@@ -51,6 +51,10 @@ public partial class EditPresetDialog
         if (!modal) return;
 
         ImGui.TextUnformatted(_textService.Translate("EditPresetDialog.Name.Label"));
+
+        if (ImGui.IsWindowAppearing())
+            ImGui.SetKeyboardFocusHere();
+
         ImGui.InputText("##PresetName", ref _name, Constants.PresetNameMaxLength);
 
         var disabled = string.IsNullOrWhiteSpace(_name);
