@@ -39,6 +39,12 @@ public abstract unsafe partial class Overlay : SimpleWindow, IDisposable, IOverl
         UpdateWindow();
     }
 
+    public override void Dispose()
+    {
+        OnClose();
+        base.Dispose();
+    }
+
     public override void OnClose()
     {
         _windowPadding.Dispose();
