@@ -57,7 +57,7 @@ public unsafe partial class AdvancedImportOverlay : Overlay
 
         if (ImGui.Button(_textService.Translate("AdvancedImportOverlay.ImportSelectedSettingsButton.Label")))
         {
-            _clipboardService.ClipboardPreset.ToState(_logger, _bannerService, _clipboardService.CurrentImportFlags);
+            _bannerService.ImportPresetToState(_clipboardService.ClipboardPreset, _clipboardService.CurrentImportFlags);
             MenuBar.CloseOverlays();
         }
 

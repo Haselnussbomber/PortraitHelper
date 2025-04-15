@@ -133,7 +133,7 @@ public unsafe partial class MenuBar : SimpleWindow
         }
         else if (ImGuiUtils.IconButton("Reset", FontAwesomeIcon.Undo, _textService.GetAddonText(4830) ?? "Reset"))
         {
-            _initialPreset.ToState(_logger, _bannerService, ImportFlags.All);
+            _bannerService.ImportPresetToState(_initialPreset);
             agent->EditorState->SetHasChanged(false);
         }
 
@@ -150,7 +150,7 @@ public unsafe partial class MenuBar : SimpleWindow
         {
             if (ImGuiUtils.IconButton("Paste", FontAwesomeIcon.Paste, _textService.Translate("MenuBar.ImportFromClipboardAllSettings.Label")))
             {
-                _clipboardService.ClipboardPreset.ToState(_logger, _bannerService, ImportFlags.All);
+                _bannerService.ImportPresetToState(_clipboardService.ClipboardPreset);
                 CloseOverlays();
             }
         }

@@ -305,7 +305,7 @@ public partial class PresetBrowserOverlay : Overlay
 
             if (ImGui.IsMouseDoubleClicked(ImGuiMouseButton.Left))
             {
-                preset.Preset?.ToState(_logger, _bannerService, ImportFlags.All);
+                _bannerService.ImportPresetToState(preset.Preset);
                 MenuBar.CloseOverlays();
             }
         }
@@ -318,7 +318,7 @@ public partial class PresetBrowserOverlay : Overlay
 
         if (ImGui.MenuItem(_textService.Translate("PresetBrowserOverlay.ContextMenu.LoadPreset.Label")))
         {
-            preset.Preset?.ToState(_logger, _bannerService, ImportFlags.All);
+            _bannerService.ImportPresetToState(preset.Preset);
             MenuBar.CloseOverlays();
         }
 
