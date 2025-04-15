@@ -2,7 +2,7 @@ using System.Numerics;
 using Dalamud.Interface.Utility.Raii;
 using HaselCommon.Gui;
 using HaselCommon.Services;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 using PortraitHelper.Config;
 using PortraitHelper.Enums;
 

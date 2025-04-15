@@ -9,7 +9,7 @@ using FFXIVClientStructs.Havok.Animation.Animation;
 using HaselCommon.Game;
 using HaselCommon.Gui;
 using HaselCommon.Services;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 using Lumina.Excel.Sheets;
 using PortraitHelper.Enums;
 using Character = FFXIVClientStructs.FFXIV.Client.Game.Character.Character;
