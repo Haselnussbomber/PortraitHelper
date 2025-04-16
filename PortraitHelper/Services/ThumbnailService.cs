@@ -134,7 +134,7 @@ public partial class ThumbnailService : IDisposable
 
         thumbnailResult = _thumbnails.GetOrAdd((id, size), static (key) => new ThumbnailResult { Id = key.Item1, Size = key.Item2 });
 
-        _thumbnailTasks.GetOrAdd(id, _ => Task.Run(async () =>
+        _thumbnailTasks.GetOrAdd(id, _ => Task.Run(() =>
         {
             try
             {
