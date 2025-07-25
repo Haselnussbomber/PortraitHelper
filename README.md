@@ -1,3 +1,26 @@
 # Portrait Helper
 
-Work in progress.
+**Portrait Helper** allows you to save and load portrait presets, edit camera and pose settings in detail, and checks whether the portrait still matches the character's current appearance and gear.
+
+## Features
+
+- **Preset Browser**  
+  Save your favorite portraits as reusable presets. Simply double-click to load one!
+    - Presets are saved as png files to the plugins configuration folder.
+    - Each preset stores a PNG preview and embeds the preset string as Exif metadata (in the UserComment field).
+- **Clipboard Import/Export**  
+  Share your portraits easily with base64-encoded strings.
+  - If you want more control over whats being imported, use the Advanced Import Mode to selectively apply only the parts of a preset you care about.
+- **Advanced Edit Mode**  
+  Fine-tune your portrait with full control over
+    - Camera yaw, pitch, distance, position (X/Y)
+    - Zoom and rotation
+    - Head and eye direction
+    - Animation timestamp
+- **Alignment Tool**  
+  Displays on-screen guide lines to help with portrait composition and symmetry.
+- **Reset Button**  
+  Quickly revert any changes made since opening the Portrait Editor.
+- **Portrait Mismatch Warning**  
+  Notifies you in chat when your portrait no longer matches your current appearance or gear.  
+  Click the chat message to open the Portrait Editor.
