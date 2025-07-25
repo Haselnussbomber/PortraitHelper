@@ -12,7 +12,7 @@ namespace PortraitHelper.Records;
 [JsonConverter(typeof(PortraitPresetConverter))]
 public sealed record PortraitPreset
 {
-    public const int Magic = 0x53505448; // HTPS => HaselTweaks Preset String
+    public const int Magic = 0x53504850; // PHPS => Portrait Helper Preset String
     public ushort Version = 1;
 
     public HalfVector4 CameraPosition;
@@ -61,7 +61,7 @@ public sealed record PortraitPreset
         using var reader = new BinaryReader(inputStream);
 
         var magic = reader.ReadInt32();
-        if (magic != Magic)
+        if (magic is not (0x53505448 or Magic)) // HTPS for compatibility
             return null;
 
         var preset = new PortraitPreset
