@@ -6,6 +6,7 @@ icon_url: https://raw.githubusercontent.com/Haselnussbomber/PortraitHelper/main/
 description: Portrait Helper allows you to save and load portrait presets, edit camera and pose settings in detail, and checks whether the portrait still matches the character's current appearance and gear.
 load_required_state: 1
 can_unload_async: true
+accepts_feedback: false
 tags:
   - portrait
   - plate
