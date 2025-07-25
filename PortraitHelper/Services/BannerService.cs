@@ -1,12 +1,11 @@
 using System.IO;
-using System.Linq.Expressions;
 using Dalamud.Plugin;
 using FFXIVClientStructs.FFXIV.Client.Graphics.Render;
 using FFXIVClientStructs.FFXIV.Client.UI;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using FFXIVClientStructs.FFXIV.Client.UI.Misc;
 using FFXIVClientStructs.FFXIV.Component.Exd;
-using HaselCommon.Extensions.Math;
+using HaselCommon.Extensions;
 using HaselCommon.Services;
 using Lumina.Excel.Sheets;
 using Microsoft.Extensions.Logging;

@@ -16,20 +16,20 @@ using Character = FFXIVClientStructs.FFXIV.Client.Game.Character.Character;
 
 namespace PortraitHelper.Windows.Overlays;
 
-[RegisterScoped, AutoConstruct]
+[RegisterSingleton, AutoConstruct]
 public unsafe partial class AdvancedEditOverlay : Overlay
 {
+    private const float ThirtyFps = 30f;
+
     private readonly TextService _textService;
     private readonly ExcelService _excelService;
-
-    public override OverlayType Type => OverlayType.LeftPane;
-
-    private const float THIRTY_FPS = 30f;
 
     private float _timestamp;
     private float _duration;
     private int _frameCount;
     private bool _isDragging;
+
+    public override OverlayType Type => OverlayType.LeftPane;
 
     private AgentBannerEditorState* EditorState => AgentBannerEditor.Instance()->EditorState;
     private CharaViewPortrait* CharaView => EditorState != null ? EditorState->CharaView : null;
@@ -77,7 +77,7 @@ public unsafe partial class AdvancedEditOverlay : Overlay
             return;
 
         _duration = animation->Duration - 0.5f;
-        _frameCount = (int)Math.Round(THIRTY_FPS * _duration);
+        _frameCount = (int)Math.Round(ThirtyFps * _duration);
     }
 
     public override void Draw()

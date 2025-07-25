@@ -7,7 +7,7 @@ using Dalamud.Interface.Textures;
 using Dalamud.Interface.Textures.TextureWraps;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
-using HaselCommon.Extensions.Collections;
+using HaselCommon.Extensions;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;

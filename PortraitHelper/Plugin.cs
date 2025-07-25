@@ -1,5 +1,6 @@
 using Dalamud.Plugin;
-using HaselCommon;
+using Dalamud.Plugin.Services;
+using HaselCommon.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using PortraitHelper.Config;
 using PortraitHelper.Services;
@@ -8,22 +9,22 @@ namespace PortraitHelper;
 
 public sealed class Plugin : IDalamudPlugin
 {
-    public Plugin(IDalamudPluginInterface pluginInterface)
+    private readonly ServiceProvider _serviceProvider;
+
+    public Plugin(IDalamudPluginInterface pluginInterface, IFramework framework)
     {
-        Service.Collection
+        _serviceProvider = new ServiceCollection()
             .AddDalamud(pluginInterface)
             .AddSingleton(PluginConfig.Load)
             .AddHaselCommon()
-            .AddPortraitHelper();
+            .AddPortraitHelper()
+            .BuildServiceProvider();
 
-        Service.Initialize(() =>
-        {
-            Service.Get<MenuBarManager>();
-        });
+        framework.RunOnFrameworkThread(_serviceProvider.GetRequiredService<MenuBarManager>);
     }
 
     void IDisposable.Dispose()
     {
-        Service.Dispose();
+        _serviceProvider.Dispose();
     }
 }

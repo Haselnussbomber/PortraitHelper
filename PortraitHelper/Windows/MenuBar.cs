@@ -25,8 +25,8 @@ namespace PortraitHelper.Windows;
 [RegisterSingleton, AutoConstruct]
 public unsafe partial class MenuBar : SimpleWindow
 {
-    private readonly ILogger<MenuBar> _logger;
     private readonly IServiceProvider _serviceProvider;
+    private readonly ILogger<MenuBar> _logger;
     private readonly IDalamudPluginInterface _pluginInterface;
     private readonly PluginConfig _pluginConfig;
     private readonly TextService _textService;
@@ -298,12 +298,12 @@ public unsafe partial class MenuBar : SimpleWindow
         var addon = GetAddon<AddonBannerEditor>(AgentId.BannerEditor);
 
         Position = new(
-            addon->AtkUnitBase.X + 4,
-            addon->AtkUnitBase.Y + 3 - height * scale
+            addon->X + 4,
+            addon->Y + 3 - height * scale
         );
 
         Size = new(
-            (addon->AtkUnitBase.GetScaledWidth(true) - 8) * scaledown,
+            (addon->GetScaledWidth(true) - 8) * scaledown,
             height
         );
     }
@@ -314,18 +314,18 @@ public unsafe partial class MenuBar : SimpleWindow
         {
             var addon = GetAddon<AddonBannerEditor>(AgentId.BannerEditor);
 
-            var rightPanel = GetNode<AtkResNode>(&addon->AtkUnitBase, 107);
-            var charaView = GetNode<AtkResNode>(&addon->AtkUnitBase, 130);
-            var scale = GetNodeScale(charaView);
+            var rightPanel = addon->GetNodeById(107);
+            var charaView = addon->GetNodeById(130);
+            var scale = addon->Scale;
 
             var position = new Vector2(
-                addon->AtkUnitBase.X + rightPanel->X * scale.X,
-                addon->AtkUnitBase.Y + rightPanel->Y * scale.Y
+                addon->X + rightPanel->X * scale,
+                addon->Y + rightPanel->Y * scale
             );
 
             var size = new Vector2(
-                charaView->GetWidth() * scale.X,
-                charaView->GetHeight() * scale.Y
+                charaView->GetWidth() * scale,
+                charaView->GetHeight() * scale
             );
 
             ImGui.SetNextWindowPos(position);
@@ -346,7 +346,7 @@ public unsafe partial class MenuBar : SimpleWindow
                         drawList.AddLine(
                             position + new Vector2(i * x, 0),
                             position + new Vector2(i * x, size.Y),
-                            _pluginConfig.AlignmentToolVerticalColor.ToUInt()
+                            ImGui.ColorConvertFloat4ToU32(_pluginConfig.AlignmentToolVerticalColor)
                         );
                     }
                 }
@@ -360,7 +360,7 @@ public unsafe partial class MenuBar : SimpleWindow
                         drawList.AddLine(
                             position + new Vector2(0, i * y),
                             position + new Vector2(size.X, i * y),
-                            _pluginConfig.AlignmentToolHorizontalColor.ToUInt()
+                            ImGui.ColorConvertFloat4ToU32(_pluginConfig.AlignmentToolHorizontalColor)
                         );
                     }
                 }

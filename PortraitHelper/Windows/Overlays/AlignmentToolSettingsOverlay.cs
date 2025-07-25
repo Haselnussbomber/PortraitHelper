@@ -8,7 +8,7 @@ using PortraitHelper.Enums;
 
 namespace PortraitHelper.Windows.Overlays;
 
-[RegisterScoped, AutoConstruct]
+[RegisterSingleton, AutoConstruct]
 public unsafe partial class AlignmentToolSettingsOverlay : Overlay
 {
     private readonly TextService _textService;

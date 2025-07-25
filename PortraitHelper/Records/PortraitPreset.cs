@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using FFXIVClientStructs.FFXIV.Client.UI.Misc;
 using FFXIVClientStructs.FFXIV.Common.Math;
-using HaselCommon.Extensions.IO;
+using HaselCommon.Extensions;
 using PortraitHelper.Extensions;
 using PortraitHelper.JsonConverters;
 
