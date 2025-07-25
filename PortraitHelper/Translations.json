@@ -6,148 +6,103 @@
     "en": "Portrait Helper"
   },
   "ConfigWindow.Title": {
-    "en": "PortraitHelper Configuration",
-    "de": "PortraitHelper Konfiguration"
+    "en": "Portrait Helper Configuration",
+    "de": "Portrait Helper Konfiguration"
   },
 
-  "GearChecksumMismatch": {
-    "en": "Current appearance and/or gear does not match that shown in portrait.",
-    "de": "Momentan angelegte Ausrüstung und Aussehen weichen vom Portrait ab.",
-    "fr": "La tenue que vous portez ou votre apparence ne correspondent pas à celles de votre portrait instantané.",
-    "ja": "現在の外見や装備がポートレートと一致していません。",
-    "zh": "当前外观或装备与肖像中显示的不匹配。"
-  },
-  "Config.NotifyGearChecksumMismatch.Label": {
-    "en": "Notify if appearance and/or gear doesn't match Portait",
-    "de": "Bei Abweichungen von Aussehen oder Ausrüstung benachrichtigen",
-    "zh": "当外观或装备与肖像不匹配时发送通知"
-  },
-  "Config.NotifyGearChecksumMismatch.Description": {
-    "en": "Prints a notification in chat which can be clicked to open the Portrait Editor.",
-    "de": "Zeigt eine Benachrichtigung im Chat an, die angeklickt werden kann, um den Portrait-Editor zu öffnen.",
-    "zh": "在消息窗口中发从一条可以点击以打开肖像编辑器的通知。"
-  },
-  "Config.IgnoreDoHDoL.Label": {
-    "en": "Do not notify for DoH/DoL jobs",
-    "de": "Nicht bei Handwerker oder Sammler benachrichtigen",
-    "zh": "不提醒制作&采集职业"
-  },
   "CreatePresetDialog.Title": {
     "en": "Save as Preset",
-    "de": "Als Vorlage speichern",
-    "zh": "作为预设保存"
+    "de": "Als Vorlage speichern"
   },
   "CreatePresetDialog.Name.Label": {
     "en": "Name for the new preset:",
-    "de": "Name für die neue Vorlage:",
-    "zh": "新预设的名称："
+    "de": "Name für die neue Vorlage:"
   },
   "DeletePresetDialog.Title": {
     "en": "Delete Preset",
-    "de": "Vorlage löschen",
-    "zh": "删除预设"
+    "de": "Vorlage löschen"
   },
   "DeletePresetDialog.Prompt": {
     "en": "Do you really want to delete the preset \"{0}\"?",
-    "de": "Möchtest du wirklich die Vorlage \"{0}\" löschen?",
-    "zh": "你真的要删除预设“{0}”吗？"
+    "de": "Möchtest du wirklich die Vorlage \"{0}\" löschen?"
   },
   "EditPresetDialog.Title": {
     "en": "Edit Preset",
-    "de": "Vorlage bearbeiten",
-    "zh": "编辑预设"
+    "de": "Vorlage bearbeiten"
   },
   "EditPresetDialog.Name.Label": {
-    "en": "Name:",
-    "zh": "名称："
+    "en": "Name:"
   },
   "AdvancedEditOverlay.Title": {
-    "en": "[HaselTweaks] Portrait Helper: Advanced Edit",
-    "de": "[HaselTweaks] Portrait Helper: Erweiterte Bearbeitung",
-    "zh": "[HaselTweaks] 肖像助手：高级编辑"
+    "en": "Portrait Helper: Advanced Edit",
+    "de": "Portrait Helper: Erweiterte Bearbeitung"
   },
   "AdvancedEditOverlay.Title.Inner": {
     "en": "Advanced Edit Mode",
-    "de": "Erweiterter Bearbeitungsmodus",
-    "zh": "高级编辑模式"
+    "de": "Erweiterter Bearbeitungsmodus"
   },
   "Setting.CameraYaw.Label": {
     "en": "Camera Yaw",
-    "de": "Kamera-Gierachse",
-    "zh": "相机水平角度"
+    "de": "Kamera-Gierachse"
   },
   "Setting.CameraYaw.Tooltip": {
     "en": "Rotation around the z-axis",
-    "de": "Rotation um die Z-Achse",
-    "zh": "绕Z轴旋转"
+    "de": "Rotation um die Z-Achse"
   },
   "Setting.CameraPitch.Label": {
     "en": "Camera Pitch",
-    "de": "Kamera-Querachse",
-    "zh": "相机垂直角度"
+    "de": "Kamera-Querachse"
   },
   "Setting.CameraPitch.Tooltip": {
     "en": "Rotation around the y-axis",
-    "de": "Rotation um die Y-Achse",
-    "zh": "绕Y轴旋转"
+    "de": "Rotation um die Y-Achse"
   },
   "Setting.CameraDistance.Label": {
     "en": "Camera Distance",
-    "de": "Kameradistanz",
-    "zh": "相机距离"
+    "de": "Kameradistanz"
   },
   "Setting.CameraTarget.Label": {
     "en": "Camera Target",
-    "de": "Kamera-Zielpunkt",
-    "zh": "目标位置"
+    "de": "Kamera-Zielpunkt"
   },
   "Setting.ZoomRotation.Label": {
     "en": "Zoom and Rotation",
-    "de": "Zoom & Rotation",
-    "zh": "缩放和旋转"
+    "de": "Zoom & Rotation"
   },
   "Setting.EyeDirection.Label": {
     "en": "Eye Direction",
-    "de": "Blickrichtung",
-    "zh": "眼睛方向"
+    "de": "Blickrichtung"
   },
   "Setting.HeadDirection.Label": {
     "en": "Head Direction",
-    "de": "Kopfdrehung",
-    "zh": "头部方向"
+    "de": "Kopfdrehung"
   },
   "Setting.AnimationTimestamp.Label": {
     "en": "Animation Timestamp",
-    "de": "Animationszeitstempel",
-    "zh": "动画时间戳"
+    "de": "Animationszeitstempel"
   },
   "Setting.AnimationTimestamp.ValueFormat": {
     "en": "{0:0.000}"
   },
   "AdvancedEditOverlay.Note.Label": {
     "en": "Please note:",
-    "de": "Bitte beachte:",
-    "zh": "请注意："
+    "de": "Bitte beachte:"
   },
   "AdvancedEditOverlay.Note.Text": {
     "en": "The game may verify the values on setting them and/or saving the portrait. If possible, it will automatically adjust them so that they are within a valid range. If not, it will throw an error and you have to fix the values yourself. In any case, if the game adjusts the values, the adjusted values will not be reflected here unless you reopen the window.",
-    "de": "Das Spiel kann die Werte beim Einstellen und/oder Speichern des Porträts überprüfen. Wenn möglich, wird es sie automatisch anpassen, so dass sie in einem gültigen Bereich liegen. Wenn nicht, gibt es eine Fehlermeldung aus und du musst die Werte selbst korrigieren. Wie auch immer, wenn das Spiel die Werte anpasst, werden die angepassten Werte hier nicht angezeigt bis das Fenster neu geöffnet wird.",
-    "zh": "游戏可能会在保存肖像或设置这些值时验证它们。如果可能，将自动调整它们，使它们处于有效范围内。如果不能，它将抛出一个错误，你必须自己调整这些值。不论何时，如果游戏调整了值，调整后的值不会在这里显示，除非你重新打开窗口。"
+    "de": "Das Spiel kann die Werte beim Einstellen und/oder Speichern des Porträts überprüfen. Wenn möglich, wird es sie automatisch anpassen, so dass sie in einem gültigen Bereich liegen. Wenn nicht, gibt es eine Fehlermeldung aus und du musst die Werte selbst korrigieren. Wie auch immer, wenn das Spiel die Werte anpasst, werden die angepassten Werte hier nicht angezeigt bis das Fenster neu geöffnet wird."
   },
   "AdvancedImportOverlay.Title": {
-    "en": "[HaselTweaks] Portrait Helper: Advanced Import",
-    "de": "[HaselTweaks] Portrait Helper: Erweiterter Import",
-    "zh": "[HaselTweaks] 肖像助手：高级导入"
+    "en": "Portrait Helper: Advanced Import",
+    "de": "Portrait Helper: Erweiterter Import"
   },
   "AdvancedImportOverlay.ImportSelectedSettingsButton.Label": {
     "en": "Import Selected Settings",
-    "de": "Ausgewählte Einstellungen importieren",
-    "zh": "导入选中的设置"
+    "de": "Ausgewählte Einstellungen importieren"
   },
   "AdvancedImportOverlay.NotUnlocked": {
     "en": "Not unlocked",
-    "de": "Nicht freigeschaltet",
-    "zh": "未解锁"
+    "de": "Nicht freigeschaltet"
   },
   "AdvancedImportOverlay.ColorInput.R": {
     "en": "R:"
@@ -177,170 +132,137 @@
     "en": "{0:0.000}"
   },
   "AlignmentToolSettingsOverlay.Title": {
-    "en": "[HaselTweaks] Portrait Helper: Alignment Tool Settings",
-    "de": "[HaselTweaks] Portrait Helper: Einstellungen des Ausrichtungswerkzeugs",
-    "zh": "[HaselTweaks] 肖像助手：辅助线设置"
+    "en": "Portrait Helper: Alignment Tool Settings",
+    "de": "Portrait Helper: Einstellungen des Ausrichtungswerkzeugs"
   },
   "AlignmentToolSettingsOverlay.Title.Inner": {
     "en": "Alignment Tool Settings",
-    "de": "Einstellungen des Ausrichtungswerkzeugs",
-    "zh": "辅助线设置"
+    "de": "Einstellungen des Ausrichtungswerkzeugs"
   },
   "AlignmentToolSettingsOverlay.ShowAlignmentTool.Label": {
     "en": "Enable",
-    "de": "Aktivieren",
-    "zh": "启用"
+    "de": "Aktivieren"
   },
   "AlignmentToolSettingsOverlay.VerticalLines.Label": {
     "en": "Vertical Lines",
-    "de": "Senkrechte Linien",
-    "zh": "垂线"
+    "de": "Senkrechte Linien"
   },
   "AlignmentToolSettingsOverlay.HorizontalLines.Label": {
     "en": "Horizontal Lines",
-    "de": "Waagerechte Linien",
-    "zh": "水平线"
+    "de": "Waagerechte Linien"
   },
   "PresetBrowserOverlay.Title": {
-    "en": "[HaselTweaks] Portrait Helper: Preset Browser",
-    "de": "[HaselTweaks] Portrait Helper: Vorlagen-Browser",
-    "zh": "[HaselTweaks] 肖像助手：预设浏览器"
+    "en": "Portrait Helper: Preset Browser",
+    "de": "Portrait Helper: Vorlagen-Browser"
   },
   "PresetBrowserOverlay.Sidebar.Presets.Title": {
     "en": "Presets",
-    "de": "Vorlagen",
-    "zh": "预设"
+    "de": "Vorlagen"
   },
   "MenuBar.Initializing": {
     "en": "Initializing...",
-    "de": "Initialisieren...",
-    "zh": "正在初始化..."
+    "de": "Initialisieren..."
   },
   "MenuBar.ExportToClipboard.Label": {
     "en": "Export to Clipboard",
-    "de": "In Zwischenablage exportieren",
-    "zh": "导出到剪贴板"
+    "de": "In Zwischenablage exportieren"
   },
   "MenuBar.ImportFromClipboard.Label": {
     "en": "Import from Clipboard",
-    "de": "Aus der Zwischenablage importieren",
-    "zh": "从剪贴板导入"
+    "de": "Aus der Zwischenablage importieren"
   },
   "MenuBar.ImportFromClipboardAllSettings.Label": {
     "en": "Import from Clipboard (All Settings)",
-    "de": "Importieren aus der Zwischenablage (Alle Einstellungen)",
-    "zh": "从剪贴板导入（所有设置）"
+    "de": "Importieren aus der Zwischenablage (Alle Einstellungen)"
   },
   "MenuBar.ToggleAdvancedImportMode.Label": {
     "en": "Toggle Advanced Import Mode",
-    "de": "Erweiterten Importmodus umschalten",
-    "zh": "开关高级导入模式"
+    "de": "Erweiterten Importmodus umschalten"
   },
   "MenuBar.ToggleAdvancedEditMode.Label": {
     "en": "Toggle Advanced Edit Mode",
-    "de": "Erweiterten Bearbeitungsmodus umschalten",
-    "zh": "开关高级编辑模式"
+    "de": "Erweiterten Bearbeitungsmodus umschalten"
   },
   "MenuBar.SaveAsPreset.Label": {
     "en": "Save as Preset",
-    "de": "Als Vorlage speichern",
-    "zh": "作为预设保存"
+    "de": "Als Vorlage speichern"
   },
   "MenuBar.TogglePresetBrowser.Label": {
     "en": "Toggle Preset Browser",
-    "de": "Vorlagen-Browser umschalten",
-    "zh": "开关预设浏览器"
+    "de": "Vorlagen-Browser umschalten"
   },
   "MenuBar.ToggleAlignmentTool.Label.CloseSettings": {
     "en": "Toggle Alignment Tool\nShift: Close Settings",
-    "de": "Ausrichtungswerkzeug umschalten\nShift: Einstellungen schließen",
-    "zh": "开关辅助线\nShift：关闭设置"
+    "de": "Ausrichtungswerkzeug umschalten\nShift: Einstellungen schließen"
   },
   "MenuBar.ToggleAlignmentTool.Label.OpenSettings": {
     "en": "Toggle Alignment Tool\nShift: Open Settings",
-    "de": "Ausrichtungswerkzeug umschalten\nShift: Einstellungen öffnen",
-    "zh": "开关辅助线\nShift：打开设置"
+    "de": "Ausrichtungswerkzeug umschalten\nShift: Einstellungen öffnen"
   },
   "PresetBrowserOverlay.MovingPresetCard.Tooltip": {
     "en": "Moving \"{0}\"",
-    "de": "Verschiebe \"{0}\"",
-    "zh": "移动“{0}”"
+    "de": "Verschiebe \"{0}\""
   },
   "PresetBrowserOverlay.ContextMenu.LoadPreset.Label": {
     "en": "Load Preset",
-    "de": "Vorlage laden",
-    "zh": "载入预设"
+    "de": "Vorlage laden"
   },
   "PresetBrowserOverlay.ContextMenu.EditPreset.Label": {
     "en": "Edit Preset",
-    "de": "Vorlage bearbeiten",
-    "zh": "编辑预设"
+    "de": "Vorlage bearbeiten"
   },
   "PresetBrowserOverlay.ContextMenu.DeletePreset.Label": {
     "en": "Delete Preset",
-    "de": "Vorlage löschen",
-    "zh": "删除预设"
+    "de": "Vorlage löschen"
   },
   "PresetBrowserOverlay.ContextMenu.ExportToClipboard.Label": {
     "en": "Export to Clipboard",
-    "de": "In Zwischenablage exportieren",
-    "zh": "导出到剪贴板"
+    "de": "In Zwischenablage exportieren"
   },
   "PresetBrowserOverlay.ContextMenu.CopyImage.Label": {
     "en": "Copy Image",
-    "de": "Bild kopieren",
-    "zh": "复制图片"
+    "de": "Bild kopieren"
   },
   "PresetBrowserOverlay.ContextMenu.CopyImage.Everything.Label": {
     "en": "Everything",
-    "de": "Alles",
-    "zh": "所有"
+    "de": "Alles"
   },
   "PresetBrowserOverlay.ContextMenu.CopyImage.WithoutFrame.Label": {
     "en": "Without Frame",
-    "de": "Ohne Rahmen",
-    "zh": "不包括边框"
+    "de": "Ohne Rahmen"
   },
   "PresetBrowserOverlay.ContextMenu.CopyImage.WithoutDecoration.Label": {
     "en": "Without Decoration",
-    "de": "Ohne Verzierung",
-    "zh": "不包括装饰物"
+    "de": "Ohne Verzierung"
   },
   "PresetBrowserOverlay.ContextMenu.CopyImage.WithoutFrameAndDecoration.Label": {
     "en": "Without Frame and Decoration",
-    "de": "Ohne Rahmen und Verzierung",
-    "zh": "不包括边框和装饰物"
+    "de": "Ohne Rahmen und Verzierung"
   },
   "PresetBrowserOverlay.Tooltip.ElementsNotApplied.Title": {
     "en": "The following elements will not be applied:",
-    "de": "Folgende Elemente werden nicht übernommen:",
-    "zh": "以下元素将不会被应用："
+    "de": "Folgende Elemente werden nicht übernommen:"
   },
   "PresetBrowserOverlay.Tooltip.ElementsNotApplied.PoseNotUnlocked": {
     "en": "Pose \"{0}\" not unlocked",
-    "de": "Pose \"{0}\" nicht freigeschaltet",
-    "zh": "动作“{0}”未解锁"
+    "de": "Pose \"{0}\" nicht freigeschaltet"
   },
   "PresetBrowserOverlay.Tooltip.ElementsNotApplied.BackgroundNotUnlocked": {
     "en": "Background \"{0}\" not unlocked",
-    "de": "Hintergrund \"{0}\" nicht freigeschaltet",
-    "zh": "背景“{0}”未解锁"
+    "de": "Hintergrund \"{0}\" nicht freigeschaltet"
   },
   "PresetBrowserOverlay.Tooltip.ElementsNotApplied.FrameNotUnlocked": {
     "en": "Frame \"{0}\" not unlocked",
-    "de": "Rahmen \"{0}\" nicht freigeschaltet",
-    "zh": "边框“{0}”未解锁"
+    "de": "Rahmen \"{0}\" nicht freigeschaltet"
   },
   "PresetBrowserOverlay.Tooltip.ElementsNotApplied.DecorationNotUnlocked": {
     "en": "Accent \"{0}\" not unlocked",
-    "de": "Verzierung \"{0}\" nicht freigeschaltet",
-    "zh": "不包括边框和装饰物"
+    "de": "Verzierung \"{0}\" nicht freigeschaltet"
   },
 
   "ConfirmationButtonWindow.Save": {
     "en": "Save",
-    "de": "Speichern",
-    "zh": "保存"
+    "de": "Speichern"
   },
   "ConfirmationButtonWindow.Saving": {
     "en": "Saving...",
@@ -348,12 +270,10 @@
   },
   "ConfirmationButtonWindow.Cancel": {
     "en": "Cancel",
-    "de": "Abbrechen",
-    "zh": "取消"
+    "de": "Abbrechen"
   },
   "ConfirmationButtonWindow.Delete": {
     "en": "Delete",
-    "de": "Löschen",
-    "zh": "删除"
+    "de": "Löschen"
   }
 }
