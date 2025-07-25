@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.2] (2025-07-25)
+
+- **Fixed:** A potential memory leak when copying preset preview images.
+
 ## [1.0.1] (2025-07-25)
 
 - **Fixed:** When scrolling the animation of emotes like Battle Stance or Victory backwards, weapon animations wouldn't be updated. Now, the animation is reloaded once when you release the slider to apply the correct state.
