@@ -28,6 +28,7 @@ public unsafe partial class AdvancedEditOverlay : Overlay
     private float _duration;
     private int _frameCount;
     private bool _isDragging;
+    private bool _scrolledBackwards;
 
     public override OverlayType Type => OverlayType.LeftPane;
 
@@ -350,10 +351,12 @@ public unsafe partial class AdvancedEditOverlay : Overlay
                 if (delta < 0)
                 {
                     CharaView->SetPoseTimed(Character->Timeline.BannerTimelineRowId, _timestamp);
+                    _scrolledBackwards = false;
                 }
                 else
                 {
                     baseTimeline->UpdateBanner(delta, 0);
+                    _scrolledBackwards = true;
                 }
 
                 CharaView->ToggleAnimationPlayback(true);
@@ -362,7 +365,14 @@ public unsafe partial class AdvancedEditOverlay : Overlay
                 if (!EditorState->HasDataChanged)
                     EditorState->SetHasChanged(true);
             }
+
             _isDragging = ImGui.IsItemActive();
+
+            if (!_isDragging && _scrolledBackwards && ImGui.IsMouseReleased(ImGuiMouseButton.Left))
+            {
+                CharaView->SetPoseTimed(Character->Timeline.BannerTimelineRowId, _timestamp);
+                _scrolledBackwards = false;
+            }
         }
     }
 }
