@@ -1,7 +1,12 @@
 # Changelog
 
+## [1.0.1] (2025-07-25)
+
+- **Fixed:** When scrolling the animation of emotes like Battle Stance or Victory backwards, weapon animations wouldn't be updated. Now, the animation is reloaded once when you release the slider to apply the correct state.
+
 ## [1.0.0] (2025-07-25)
 
 First release! 🥳
 
-[1.0.0]: https://github.com/Haselnussbomber/PortraitHelper
+[1.0.1]: https://github.com/Haselnussbomber/PortraitHelper/compare/v1.0.0..v1.0.1
+[1.0.0]: https://github.com/Haselnussbomber/PortraitHelper/commit/6e3a3e05
