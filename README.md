@@ -24,3 +24,12 @@
 - **Portrait Mismatch Warning**  
   Notifies you in chat when your portrait no longer matches your current appearance or gear.  
   Click the chat message to open the Portrait Editor.
+
+
+## Known Issues
+
+- **Scrolling the animation timestamp forward does not advance the weapon animation of emotes like Battle Stance or Victory.**  
+  Workaround: Scroll backwards once for it to reload the animation.  
+  The animation system has not yet been fully understood/reverse engineered yet. Because forward and backward scrolling use different techniques, the animation will reload when scrolling backwards, updating the weapon positions too.
+- **It's possible to load animations that are job-specific with other jobs, but they end up stuck.**  
+  Yup. Load a different animation then.
