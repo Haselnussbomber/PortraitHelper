@@ -1,6 +1,6 @@
 # Portrait Helper
 
-**Portrait Helper** allows you to save and load portrait presets, edit camera and pose settings in detail, and checks whether the portrait still matches the character's current appearance and gear.
+**Portrait Helper** allows you to save and load portrait presets, edit camera and pose settings in detail.
 
 Portrait Helper opens automatically when you edit a portrait. It's a small bar at the top of the window.
 
@@ -24,12 +24,3 @@ This plugin is hopefully soon available in the Dalamud plugin repository!
   Displays on-screen guide lines to help with portrait composition and symmetry.
 - **Reset Button**  
   Quickly revert any changes made since opening the Portrait Editor.
-- **Portrait Mismatch Warning**  
-  Notifies you in chat when your portrait no longer matches your current appearance or gear.  
-  Click the chat message to open the Portrait Editor.
-
-
-## Known Issues
-
-- **It's possible to load animations that are job-specific with other jobs, but they end up stuck.**  
-  Yup. Load a different animation then.
