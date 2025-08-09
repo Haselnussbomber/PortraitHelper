@@ -1,4 +1,5 @@
 using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 using Dalamud.Hooking;
 using Dalamud.Plugin.Services;
@@ -6,12 +7,12 @@ using FFXIVClientStructs.FFXIV.Client.UI;
 using Microsoft.Extensions.Logging;
 using PortraitHelper.Enums;
 using PortraitHelper.Records;
+using PortraitHelper.Utils;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.Graphics.Gdi;
-using Windows.Win32.System.Memory;
 using Windows.Win32.System.Ole;
 
 namespace PortraitHelper.Services;
@@ -66,16 +67,24 @@ public partial class ClipboardService : IDisposable
         {
             PInvoke.EmptyClipboard();
 
-            if (preset != null)
-            {
-                var clipboardText = Marshal.StringToHGlobalAnsi(preset.ToExportedString());
-                if (PInvoke.SetClipboardData((uint)CLIPBOARD_FORMAT.CF_TEXT, (HANDLE)clipboardText) != 0)
-                    ClipboardPreset = preset;
-            }
-            else
+            if (preset == null)
             {
                 ClipboardPreset = null;
+                return;
             }
+
+            var presetString = preset.ToExportedString();
+            var length = Encoding.UTF8.GetByteCount(presetString);
+
+            using var writer = new ClipboardWriter(CLIPBOARD_FORMAT.CF_TEXT);
+
+            if (!writer.TryAllocMemorySpan(length, out var span))
+                return;
+
+            Encoding.UTF8.GetBytes(presetString, span);
+
+            if (writer.End())
+                ClipboardPreset = preset;
         }
         catch (Exception e)
         {
@@ -110,18 +119,13 @@ public partial class ClipboardService : IDisposable
 
     private unsafe void SetDIB(Image<Rgba32> image)
     {
-        var hMem = PInvoke.GlobalAlloc(GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE, (nuint)(sizeof(BITMAPINFOHEADER) + image.Width * image.Height * sizeof(Bgra32))); // tagBITMAPINFO
-        if (hMem.IsNull)
+        using var writer = new ClipboardWriter(CLIPBOARD_FORMAT.CF_DIB);
+
+        var length = sizeof(BITMAPINFOHEADER) + image.Width * image.Height * sizeof(Bgra32);
+        if (!writer.TryAllocMemory(length, out var memory))
             return;
 
-        var data = (nint)PInvoke.GlobalLock(hMem);
-        if (data == 0)
-        {
-            PInvoke.GlobalFree(hMem);
-            return;
-        }
-
-        var header = (BITMAPINFOHEADER*)data;
+        var header = (BITMAPINFOHEADER*)memory;
         header->biSize = (uint)sizeof(BITMAPINFOHEADER);
         header->biWidth = image.Width;
         header->biHeight = -image.Height;
@@ -134,32 +138,24 @@ public partial class ClipboardService : IDisposable
         header->biClrUsed = 0;
         header->biClrImportant = 0;
 
-        var pixelSpan = new Span<Bgra32>((void*)(data + header->biSize), image.Width * image.Height);
+        var pixelSpan = new Span<Bgra32>((byte*)memory + header->biSize, image.Width * image.Height);
 
         using (var bgra = image.CloneAs<Bgra32>())
             bgra.CopyPixelDataTo(pixelSpan);
 
         foreach (ref var pixel in pixelSpan)
             pixel.A = 0; // rgbReserved of RGBQUAD "must be zero"
-
-        PInvoke.GlobalUnlock(hMem);
-        PInvoke.SetClipboardData((uint)CLIPBOARD_FORMAT.CF_DIB, (HANDLE)(nint)hMem);
     }
 
     private unsafe void SetDIBV5(Image<Rgba32> image)
     {
-        var hMem = PInvoke.GlobalAlloc(GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE, (nuint)(sizeof(BITMAPV5HEADER) + image.Width * image.Height * sizeof(Bgra32)));
-        if (hMem.IsNull)
+        using var writer = new ClipboardWriter(CLIPBOARD_FORMAT.CF_DIBV5);
+
+        var length = sizeof(BITMAPV5HEADER) + image.Width * image.Height * sizeof(Bgra32);
+        if (!writer.TryAllocMemory(length, out var memory))
             return;
 
-        var data = (nint)PInvoke.GlobalLock(hMem);
-        if (data == 0)
-        {
-            PInvoke.GlobalFree(hMem);
-            return;
-        }
-
-        var bitmapInfo = (BITMAPV5HEADER*)data;
+        var bitmapInfo = (BITMAPV5HEADER*)memory;
         bitmapInfo->bV5Size = (uint)Marshal.SizeOf(typeof(BITMAPV5HEADER));
         bitmapInfo->bV5Width = image.Width;
         bitmapInfo->bV5Height = -image.Height; // negative height for top-down image
@@ -185,16 +181,13 @@ public partial class ClipboardService : IDisposable
         bitmapInfo->bV5ProfileSize = 0;
         bitmapInfo->bV5Reserved = 0;
 
-        var pixelSpan = new Span<Bgra32>((void*)(data + bitmapInfo->bV5Size), image.Width * image.Height);
+        var pixelSpan = new Span<Bgra32>((byte*)memory + bitmapInfo->bV5Size, image.Width * image.Height);
 
         using (var bgra = image.CloneAs<Bgra32>())
             bgra.CopyPixelDataTo(pixelSpan);
 
         foreach (ref var pixel in pixelSpan)
             pixel.A = 0; // rgbReserved of RGBQUAD "must be zero"
-
-        PInvoke.GlobalUnlock(hMem);
-        PInvoke.SetClipboardData((uint)CLIPBOARD_FORMAT.CF_DIBV5, (HANDLE)(nint)hMem);
     }
 
     private unsafe void SetPNG(Image<Rgba32> image)
@@ -204,23 +197,17 @@ public partial class ClipboardService : IDisposable
             return;
 
         using var ms = new MemoryStream();
+
         image.SaveAsPng(ms);
-        var bytes = ms.ToArray();
 
-        var hMem = PInvoke.GlobalAlloc(GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE, (nuint)bytes.Length);
-        if (hMem.IsNull)
+        using var writer = new ClipboardWriter(format);
+
+        if (!writer.TryAllocMemorySpan((int)ms.Length, out var span))
             return;
 
-        var data = (nint)PInvoke.GlobalLock(hMem);
-        if (data == 0)
-        {
-            PInvoke.GlobalFree(hMem);
+        if (!ms.TryGetBuffer(out var buffer))
             return;
-        }
 
-        Marshal.Copy(bytes, 0, data, bytes.Length);
-
-        PInvoke.GlobalUnlock(hMem);
-        PInvoke.SetClipboardData(format, (HANDLE)(nint)hMem);
+        buffer.AsSpan().CopyTo(span);
     }
 }
