@@ -109,7 +109,7 @@ public partial class CreatePresetDialog
                             ColorType = PngColorType.Rgb // no need for alpha channel
                         });
 
-                        _pluginConfig.Presets.Insert(0, new(guid, _name.Trim(), _preset));
+                        _pluginConfig.Presets.Insert(0, new(guid, name.Trim(), _preset));
                         _pluginConfig.Save();
 
                         _name = string.Empty;
