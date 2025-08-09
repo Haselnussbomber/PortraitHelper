@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.4] (2025-08-09)
+
+Update for 7.3 / API13.
+
+- **Fixed:** Improved clipboard handling.
+
 ## [1.0.3] (2025-07-25)
 
 - **Fixed:** Improved wording on some translations.
@@ -16,6 +22,7 @@
 
 First release! 🥳
 
+[1.0.4]: https://github.com/Haselnussbomber/PortraitHelper/compare/v1.0.3..v1.0.4
 [1.0.3]: https://github.com/Haselnussbomber/PortraitHelper/compare/v1.0.2..v1.0.3
 [1.0.2]: https://github.com/Haselnussbomber/PortraitHelper/compare/v1.0.1..v1.0.2
 [1.0.1]: https://github.com/Haselnussbomber/PortraitHelper/compare/v1.0.0..v1.0.1
