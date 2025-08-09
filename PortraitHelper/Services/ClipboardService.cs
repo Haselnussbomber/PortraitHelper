@@ -111,10 +111,24 @@ public partial class ClipboardService : IDisposable
 
     private async Task OpenClipboard()
     {
-        while (!PInvoke.OpenClipboard(HWND.Null))
+        HWND hwnd;
+        while (!(hwnd = GetWindowHandle()).IsNull && !PInvoke.OpenClipboard(hwnd))
         {
             await Task.Delay(100);
         }
+    }
+
+    private unsafe HWND GetWindowHandle()
+    {
+        var framework = FFXIVClientStructs.FFXIV.Client.System.Framework.Framework.Instance();
+        if (framework == null)
+            return HWND.Null;
+
+        var uiClipboard = framework->GetUIClipboard();
+        if (uiClipboard == null)
+            return HWND.Null;
+
+        return (HWND)uiClipboard->ThisHwnd;
     }
 
     private unsafe void SetDIB(Image<Rgba32> image)
