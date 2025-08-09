@@ -44,7 +44,7 @@ public partial class EditPresetDialog
             return;
 
         // Always center this window when appearing
-        var center = ImGui.GetMainViewport().Size / 2f;
+        var center = ImGui.GetMainViewport().GetCenter();
         ImGui.SetNextWindowPos(center, ImGuiCond.Appearing, new(0.5f, 0.5f));
 
         using var modal = ImRaiiExt.PopupModal(title, ImGuiWindowFlags.AlwaysAutoResize);
