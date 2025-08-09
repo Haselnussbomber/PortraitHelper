@@ -16,6 +16,6 @@ public static unsafe class ImRaiiExt
         if (name == null)
             return false;
 
-        return ImGui.BeginPopupModal(name, null, flags);
+        return ImGui.BeginPopupModal(name, flags);
     }
 }

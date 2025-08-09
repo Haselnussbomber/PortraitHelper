@@ -126,7 +126,7 @@ public abstract unsafe partial class Overlay : SimpleWindow, IDisposable, IOverl
             Flags |= ImGuiWindowFlags.NoSavedSettings;
             Flags |= ImGuiWindowFlags.NoDecoration;
             Flags |= ImGuiWindowFlags.NoMove;
-            SizeConditionNew = ImGuiCond.Always;
+            SizeCondition = ImGuiCond.Always;
 
             var scale = addon->Scale;
 
@@ -170,7 +170,7 @@ public abstract unsafe partial class Overlay : SimpleWindow, IDisposable, IOverl
             Flags &= ~ImGuiWindowFlags.NoMove;
             Flags &= ~ImGuiWindowFlags.AlwaysAutoResize;
 
-            SizeConditionNew = ImGuiCond.Appearing;
+            SizeCondition = ImGuiCond.Appearing;
             SizeConstraints = new WindowSizeConstraints
             {
                 MinimumSize = new Vector2(400, 500),

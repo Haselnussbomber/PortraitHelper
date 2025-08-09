@@ -4,5 +4,5 @@ namespace PortraitHelper.Utils;
 public static class Constants
 {
     public const float DialogButtonMinWidth = 120;
-    public const uint PresetNameMaxLength = 100;
+    public const int PresetNameMaxLength = 100;
 }

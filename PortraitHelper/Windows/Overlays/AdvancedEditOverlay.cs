@@ -118,7 +118,7 @@ public unsafe partial class AdvancedEditOverlay : Overlay
         using ((Misc.IsLightTheme && !IsWindow && _excelService.TryGetRow<UIColor>(3, out var noteColor) ? Color.FromABGR(noteColor.Dark) : Color.Grey).Push(ImGuiCol.Text))
         {
             ImGui.TextUnformatted(_textService.Translate("AdvancedEditOverlay.Note.Label"));
-            ImGuiHelpers.SafeTextWrapped(_textService.Translate("AdvancedEditOverlay.Note.Text"));
+            ImGui.TextWrapped(_textService.Translate("AdvancedEditOverlay.Note.Text"));
         }
     }
 

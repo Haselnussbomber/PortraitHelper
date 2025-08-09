@@ -55,7 +55,9 @@ public partial class EditPresetDialog
         if (ImGui.IsWindowAppearing())
             ImGui.SetKeyboardFocusHere();
 
-        ImGui.InputText("##PresetName", ref _name, Constants.PresetNameMaxLength);
+        var name = _name;
+        if (ImGui.InputText("##PresetName", ref name, Constants.PresetNameMaxLength))
+            _name = name;
 
         var disabled = string.IsNullOrWhiteSpace(_name);
         var shouldSave = !disabled && (ImGui.IsKeyPressed(ImGuiKey.Enter) || ImGui.IsKeyPressed(ImGuiKey.KeypadEnter));

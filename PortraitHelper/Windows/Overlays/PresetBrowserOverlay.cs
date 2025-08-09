@@ -163,7 +163,7 @@ public partial class PresetBrowserOverlay : Overlay
             }
             else if (exception != null)
             {
-                using var font = ImRaii.PushFont(UiBuilder.IconFontNew);
+                using var font = ImRaii.PushFont(UiBuilder.IconFont);
                 using var color = Color.Red.Push(ImGuiCol.Text);
                 ImGui.SetCursorPos(center - ImGui.CalcTextSize(FontAwesomeIcon.Times.ToIconString()) / 2f);
                 ImGui.TextUnformatted(FontAwesomeIcon.Times.ToIconString());
@@ -171,7 +171,7 @@ public partial class PresetBrowserOverlay : Overlay
         }
         else if (!exists)
         {
-            using var font = ImRaii.PushFont(UiBuilder.IconFontNew);
+            using var font = ImRaii.PushFont(UiBuilder.IconFont);
             using var color = Color.Red.Push(ImGuiCol.Text);
             ImGui.SetCursorPos(center - ImGui.CalcTextSize(FontAwesomeIcon.FileImage.ToIconString()) / 2f);
             ImGui.TextUnformatted(FontAwesomeIcon.FileImage.ToIconString());
@@ -216,14 +216,7 @@ public partial class PresetBrowserOverlay : Overlay
                 using (ImRaii.PushColor(ImGuiCol.Text, defaultImGuiTextColor))
                     ImGui.TextUnformatted(_textService.Translate("PresetBrowserOverlay.MovingPresetCard.Tooltip", preset.Name));
 
-                unsafe
-                {
-                    var bytes = preset.Id.ToByteArray();
-                    fixed (byte* ptr = bytes)
-                    {
-                        ImGui.SetDragDropPayload("MovePresetCard", ptr, (uint)bytes.Length);
-                    }
-                }
+                ImGui.SetDragDropPayload("MovePresetCard"u8, preset.Id.ToByteArray(), ImGuiCond.None);
             }
         }
 
