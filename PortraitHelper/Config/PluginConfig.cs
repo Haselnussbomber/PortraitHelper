@@ -4,6 +4,8 @@ using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using Dalamud.Configuration;
 using Dalamud.Utility;
+using PortraitHelper.Config.Migrations;
+using PortraitHelper.Interfaces;
 using PortraitHelper.Records;
 
 namespace PortraitHelper.Config;
@@ -11,7 +13,7 @@ namespace PortraitHelper.Config;
 public partial class PluginConfig : IPluginConfiguration
 {
     [JsonIgnore]
-    public const int CURRENT_CONFIG_VERSION = 1;
+    public const int CURRENT_CONFIG_VERSION = 2;
 
     [JsonIgnore]
     public int LastSavedConfigHash { get; set; }
@@ -65,9 +67,32 @@ public partial class PluginConfig : IPluginConfiguration
         if (version == null)
             return new();
 
-        var pluginConfig = JsonSerializer.Deserialize<PluginConfig>(node, SerializerOptions);
-        if (pluginConfig == null)
-            return new();
+        var migrated = false;
+
+        IConfigMigration[] migrations = [
+            new Version2(),
+        ];
+
+        foreach (var migration in migrations)
+        {
+            if (version < migration.Version)
+            {
+                PluginLog.Information("Migrating from version {version} to {migrationVersion}...", version, migration.Version);
+
+                migration.Migrate(ref config);
+                version = migration.Version;
+                config[nameof(Version)] = version;
+                migrated = true;
+            }
+        }
+
+        var pluginConfig = JsonSerializer.Deserialize<PluginConfig>(config, SerializerOptions) ?? new();
+
+        if (migrated)
+        {
+            PluginLog.Information("Configuration migrated successfully.");
+            pluginConfig.Save();
+        }
 
         pluginConfig.BannerPresets.RemoveAll(preset => string.IsNullOrEmpty(preset.Name) || preset.Preset == null);
 
