@@ -1,16 +1,16 @@
 using FFXIVClientStructs.FFXIV.Client.UI;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
+using PortraitHelper.Windows.BannerEditor.Dialogs;
+using PortraitHelper.Windows.BannerEditor.MenuBarButtons;
 using PortraitHelper.Components;
-using PortraitHelper.Services;
-using PortraitHelper.Windows.Dialogs;
-using PortraitHelper.Windows.MenuBarButtons;
+using PortraitHelper.Services.BannerEditor;
 
-namespace PortraitHelper.Windows;
+namespace PortraitHelper.Windows.BannerEditor;
 
 [RegisterSingleton, AutoConstruct]
 public unsafe partial class MenuBar : SimpleWindow
 {
-    private readonly MenuBarState _state;
+    private readonly BannerMenuBarState _state;
     private readonly TextService _textService;
     private readonly ResetButton _resetButton;
     private readonly CopyButton _copyButton;

@@ -1,9 +1,9 @@
 using System.Threading.Tasks;
 using PortraitHelper.Components;
 using PortraitHelper.Records;
-using PortraitHelper.Services;
+using PortraitHelper.Services.BannerEditor;
 
-namespace PortraitHelper.Windows.MenuBarButtons;
+namespace PortraitHelper.Windows.BannerEditor.MenuBarButtons;
 
 [RegisterSingleton, AutoConstruct]
 public unsafe partial class CopyButton : MenuBarButton
@@ -21,6 +21,6 @@ public unsafe partial class CopyButton : MenuBarButton
 
     public override void OnClick()
     {
-        Task.Run(() => _clipboardService.SetClipboardPortraitPreset(PortraitPreset.FromState()));
+        Task.Run(() => _clipboardService.SetClipboardPortraitPreset(Records.BannerPreset.FromState()));
     }
 }

@@ -1,14 +1,14 @@
 using System.Threading.Tasks;
 using PortraitHelper.Config;
 using PortraitHelper.Records;
-using PortraitHelper.Services;
+using PortraitHelper.Services.BannerEditor;
 using PortraitHelper.Utils;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp.Metadata.Profiles.Exif;
 using SixLabors.ImageSharp.PixelFormats;
 
-namespace PortraitHelper.Windows.Dialogs;
+namespace PortraitHelper.Windows.BannerEditor.Dialogs;
 
 [RegisterScoped, AutoConstruct]
 public partial class CreatePresetDialog
@@ -21,10 +21,10 @@ public partial class CreatePresetDialog
     private bool _shouldOpen;
     private bool _isSaving;
     private string? _name;
-    private PortraitPreset? _preset;
+    private Records.BannerPreset? _preset;
     private Image<Bgra32>? _image;
 
-    public void Open(string name, PortraitPreset? preset, Image<Bgra32>? image)
+    public void Open(string name, Records.BannerPreset? preset, Image<Bgra32>? image)
     {
         _name = name;
         _preset = preset;
@@ -102,7 +102,7 @@ public partial class CreatePresetDialog
                             ColorType = PngColorType.Rgb // no need for alpha channel
                         });
 
-                        _pluginConfig.Presets.Insert(0, new(guid, name.Trim(), _preset));
+                        _pluginConfig.BannerPresets.Insert(0, new(guid, name.Trim(), _preset));
                         _pluginConfig.Save();
 
                         _name = string.Empty;

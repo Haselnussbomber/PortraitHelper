@@ -1,7 +1,8 @@
+using PortraitHelper.Components;
 using PortraitHelper.Config;
 using PortraitHelper.Enums;
 
-namespace PortraitHelper.Windows.Overlays;
+namespace PortraitHelper.Windows.BannerEditor.Overlays;
 
 [RegisterTransient, AutoConstruct]
 public unsafe partial class AlignmentToolSettingsOverlay : Overlay

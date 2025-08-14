@@ -4,7 +4,7 @@ using PortraitHelper.Config;
 using PortraitHelper.Enums;
 using PortraitHelper.Interfaces;
 
-namespace PortraitHelper.Windows;
+namespace PortraitHelper.Components;
 
 [AutoConstruct]
 public abstract unsafe partial class Overlay : SimpleWindow, IDisposable, IOverlay

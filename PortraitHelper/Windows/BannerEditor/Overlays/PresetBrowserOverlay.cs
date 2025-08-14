@@ -2,16 +2,17 @@ using System.Threading.Tasks;
 using Dalamud.Memory;
 using Dalamud.Utility;
 using Lumina.Data.Files;
+using PortraitHelper.Components;
 using PortraitHelper.Config;
 using PortraitHelper.Enums;
 using PortraitHelper.Records;
-using PortraitHelper.Services;
-using PortraitHelper.Windows.Dialogs;
+using PortraitHelper.Services.BannerEditor;
+using PortraitHelper.Windows.BannerEditor.Dialogs;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 
-namespace PortraitHelper.Windows.Overlays;
+namespace PortraitHelper.Windows.BannerEditor.Overlays;
 
 [RegisterTransient, AutoConstruct]
 public partial class PresetBrowserOverlay : Overlay
@@ -21,8 +22,7 @@ public partial class PresetBrowserOverlay : Overlay
     private static readonly Color ButtonActiveColor = Color.White with { A = 0.3f };
     private static readonly Color ButtonHoveredColor = Color.White with { A = 0.2f };
 
-    private readonly ILogger<PresetBrowserOverlay> _logger;
-    private readonly MenuBarState _state;
+    private readonly BannerMenuBarState _state;
     private readonly IDataManager _dataManager;
     private readonly ITextureProvider _textureProvider;
     private readonly PluginConfig _pluginConfig;
@@ -85,7 +85,7 @@ public partial class PresetBrowserOverlay : Overlay
         var scale = presetWidth / PortraitSize.X;
 
         var clipper = ImGui.ImGuiListClipper();
-        var presets = _pluginConfig.Presets;
+        var presets = _pluginConfig.BannerPresets;
         clipper.Begin((int)Math.Ceiling(presets.Count / (float)presetsPerRow), PortraitSize.Y * scale);
         while (clipper.Step())
         {
@@ -103,7 +103,7 @@ public partial class PresetBrowserOverlay : Overlay
         clipper.Destroy();
     }
 
-    private void DrawPresetCard(SavedPreset preset, float scale, uint defaultImGuiTextColor)
+    private void DrawPresetCard(SavedBannerPreset preset, float scale, uint defaultImGuiTextColor)
     {
         var hasBannerFrameRow = _excelService.TryGetRow<BannerFrame>(preset.Preset!.BannerFrame, out var bannerFrameRow);
         var hasBannerDecorationRow = _excelService.TryGetRow<BannerDecoration>(preset.Preset.BannerDecoration, out var bannerDecorationRow);
@@ -212,11 +212,11 @@ public partial class PresetBrowserOverlay : Overlay
                     if (payload.IsDelivery() && payload.Data != null)
                     {
                         var presetId = MemoryHelper.Read<Guid>((nint)payload.Data).ToString();
-                        var oldIndex = _pluginConfig.Presets.AsEnumerable().IndexOf((preset) => preset.Id.ToString() == presetId);
-                        var newIndex = _pluginConfig.Presets.IndexOf(preset);
-                        var item = _pluginConfig.Presets[oldIndex];
-                        _pluginConfig.Presets.RemoveAt(oldIndex);
-                        _pluginConfig.Presets.Insert(newIndex, item);
+                        var oldIndex = _pluginConfig.BannerPresets.AsEnumerable().IndexOf((preset) => preset.Id.ToString() == presetId);
+                        var newIndex = _pluginConfig.BannerPresets.IndexOf(preset);
+                        var item = _pluginConfig.BannerPresets[oldIndex];
+                        _pluginConfig.BannerPresets.RemoveAt(oldIndex);
+                        _pluginConfig.BannerPresets.Insert(newIndex, item);
                         _pluginConfig.Save();
                     }
                 }
@@ -304,13 +304,13 @@ public partial class PresetBrowserOverlay : Overlay
                 Task.Run(() => CopyImage(preset, path));
 
             if (ImGui.MenuItem(_textService.Translate("PresetBrowserOverlay.ContextMenu.CopyImage.WithoutFrame.Label")))
-                Task.Run(() => CopyImage(preset, path, CopyImageFlags.NoFrame));
+                Task.Run(() => CopyImage(preset, path, BannerCopyImageFlags.NoFrame));
 
             if (ImGui.MenuItem(_textService.Translate("PresetBrowserOverlay.ContextMenu.CopyImage.WithoutDecoration.Label")))
-                Task.Run(() => CopyImage(preset, path, CopyImageFlags.NoDecoration));
+                Task.Run(() => CopyImage(preset, path, BannerCopyImageFlags.NoDecoration));
 
             if (ImGui.MenuItem(_textService.Translate("PresetBrowserOverlay.ContextMenu.CopyImage.WithoutFrameAndDecoration.Label")))
-                Task.Run(() => CopyImage(preset, path, CopyImageFlags.NoFrame | CopyImageFlags.NoDecoration));
+                Task.Run(() => CopyImage(preset, path, BannerCopyImageFlags.NoFrame | BannerCopyImageFlags.NoDecoration));
 
             ImGui.EndMenu();
         }
@@ -343,11 +343,11 @@ public partial class PresetBrowserOverlay : Overlay
         }
     }
 
-    private async Task CopyImage(SavedPreset preset, string filePath, CopyImageFlags flags = CopyImageFlags.None)
+    private async Task CopyImage(SavedBannerPreset preset, string filePath, BannerCopyImageFlags flags = BannerCopyImageFlags.None)
     {
         using var tempImage = await Image.LoadAsync<Rgba32>(filePath);
 
-        if (!flags.HasFlag(CopyImageFlags.NoFrame) && _excelService.TryGetRow<BannerFrame>(preset.Preset!.BannerFrame, out var bannerFrameRow) && bannerFrameRow.Image != 0)
+        if (!flags.HasFlag(BannerCopyImageFlags.NoFrame) && _excelService.TryGetRow<BannerFrame>(preset.Preset!.BannerFrame, out var bannerFrameRow) && bannerFrameRow.Image != 0)
         {
             if (_textureProvider.TryGetIconPath(bannerFrameRow.Image, out var iconPath))
             {
@@ -361,7 +361,7 @@ public partial class PresetBrowserOverlay : Overlay
             }
         }
 
-        if (!flags.HasFlag(CopyImageFlags.NoDecoration) && _excelService.TryGetRow<BannerDecoration>(preset.Preset!.BannerDecoration, out var bannerDecorationRow) && bannerDecorationRow.Image != 0)
+        if (!flags.HasFlag(BannerCopyImageFlags.NoDecoration) && _excelService.TryGetRow<BannerDecoration>(preset.Preset!.BannerDecoration, out var bannerDecorationRow) && bannerDecorationRow.Image != 0)
         {
             if (_textureProvider.TryGetIconPath(bannerDecorationRow.Image, out var iconPath))
             {

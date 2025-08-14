@@ -1,8 +1,8 @@
 using PortraitHelper.Components;
-using PortraitHelper.Services;
-using PortraitHelper.Windows.Overlays;
+using PortraitHelper.Services.BannerEditor;
+using PortraitHelper.Windows.BannerEditor.Overlays;
 
-namespace PortraitHelper.Windows.MenuBarButtons;
+namespace PortraitHelper.Windows.BannerEditor.MenuBarButtons;
 
 [RegisterSingleton, AutoConstruct]
 public partial class AdvancedImportButton : MenuBarOverlayButton<AdvancedImportOverlay>

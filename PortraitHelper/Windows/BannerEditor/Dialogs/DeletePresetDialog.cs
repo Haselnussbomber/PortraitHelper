@@ -1,23 +1,25 @@
+using System.IO;
 using PortraitHelper.Config;
 using PortraitHelper.Records;
+using PortraitHelper.Services.BannerEditor;
 using PortraitHelper.Utils;
 
-namespace PortraitHelper.Windows.Dialogs;
+namespace PortraitHelper.Windows.BannerEditor.Dialogs;
 
 [RegisterSingleton, AutoConstruct]
-public partial class EditPresetDialog
+public partial class DeletePresetDialog
 {
+    private readonly INotificationManager _notificationManager;
     private readonly TextService _textService;
     private readonly PluginConfig _pluginConfig;
+    private readonly ThumbnailService _thumbnailService;
 
     private bool _shouldOpen;
-    private SavedPreset? _preset;
-    private string _name;
+    private SavedBannerPreset? _preset;
 
-    public void Open(SavedPreset preset)
+    public void Open(SavedBannerPreset preset)
     {
         _preset = preset;
-        _name = preset.Name;
         _shouldOpen = true;
     }
 
@@ -26,7 +28,7 @@ public partial class EditPresetDialog
         if (_preset == null)
             return;
 
-        var title = _textService.Translate("EditPresetDialog.Title");
+        var title = _textService.Translate("DeletePresetDialog.Title");
 
         if (_shouldOpen)
         {
@@ -44,38 +46,42 @@ public partial class EditPresetDialog
         using var modal = ImRaiiExt.PopupModal(title, ImGuiWindowFlags.AlwaysAutoResize);
         if (!modal) return;
 
-        ImGui.TextUnformatted(_textService.Translate("EditPresetDialog.Name.Label"));
-
-        if (ImGui.IsWindowAppearing())
-            ImGui.SetKeyboardFocusHere();
-
-        var name = _name;
-        if (ImGui.InputText("##PresetName", ref name, Constants.PresetNameMaxLength))
-            _name = name;
-
-        var disabled = string.IsNullOrWhiteSpace(_name);
-        var shouldSave = !disabled && (ImGui.IsKeyPressed(ImGuiKey.Enter) || ImGui.IsKeyPressed(ImGuiKey.KeypadEnter));
+        ImGui.TextUnformatted(_textService.Translate("DeletePresetDialog.Prompt", _preset.Name));
 
         ImGui.Spacing();
         ImGui.Separator();
         ImGui.Spacing();
 
         var combinedButtonWidths = ImGui.GetStyle().ItemSpacing.X
-            + MathF.Max(Constants.DialogButtonMinWidth, ImGuiHelpers.GetButtonSize(_textService.Translate("ConfirmationButtonWindow.Save")).X)
+            + MathF.Max(Constants.DialogButtonMinWidth, ImGuiHelpers.GetButtonSize(_textService.Translate("ConfirmationButtonWindow.Delete")).X)
             + MathF.Max(Constants.DialogButtonMinWidth, ImGuiHelpers.GetButtonSize(_textService.Translate("ConfirmationButtonWindow.Cancel")).X);
 
         ImGuiUtils.PushCursorX((ImGui.GetContentRegionAvail().X - combinedButtonWidths) / 2f);
 
-        using (ImRaii.Disabled(disabled))
+        if (ImGui.Button(_textService.Translate("ConfirmationButtonWindow.Delete"), new Vector2(120, 0)))
         {
-            if (ImGui.Button(_textService.Translate("ConfirmationButtonWindow.Save"), new Vector2(120, 0)) || shouldSave)
+            var thumbPath = _thumbnailService.GetPortraitThumbnailPath(_preset.Id);
+            if (File.Exists(thumbPath))
             {
-                _preset.Name = _name;
-                _pluginConfig.Save();
-                _preset = null;
-                _name = string.Empty;
-                ImGui.CloseCurrentPopup();
+                try
+                {
+                    File.Delete(thumbPath);
+                }
+                catch (Exception ex)
+                {
+                    _notificationManager.AddNotification(new()
+                    {
+                        Title = "Could not delete preset",
+                        Content = ex.Message,
+                    });
+                }
             }
+
+            _pluginConfig.BannerPresets.Remove(_preset);
+            _pluginConfig.Save();
+
+            _preset = null;
+            ImGui.CloseCurrentPopup();
         }
 
         ImGui.SetItemDefaultFocus();

@@ -12,7 +12,7 @@ using Windows.Win32.Foundation;
 using Windows.Win32.Graphics.Gdi;
 using Windows.Win32.System.Ole;
 
-namespace PortraitHelper.Services;
+namespace PortraitHelper.Services.BannerEditor;
 
 [RegisterSingleton, AutoConstruct]
 public partial class ClipboardService : IDisposable
@@ -22,8 +22,8 @@ public partial class ClipboardService : IDisposable
 
     private Hook<UIClipboard.Delegates.OnClipboardDataChanged>? _onClipboardDataChangedHook;
 
-    public ImportFlags CurrentImportFlags { get; set; } = ImportFlags.All;
-    public PortraitPreset? ClipboardPreset { get; set; }
+    public BannerImportFlags CurrentImportFlags { get; set; } = BannerImportFlags.All;
+    public Records.BannerPreset? ClipboardPreset { get; set; }
 
     [AutoPostConstruct]
     private unsafe void Initialize()
@@ -46,7 +46,7 @@ public partial class ClipboardService : IDisposable
 
         try
         {
-            ClipboardPreset = PortraitPreset.FromExportedString(uiClipboard->Data.SystemClipboardText.ToString());
+            ClipboardPreset = Records.BannerPreset.FromExportedString(uiClipboard->Data.SystemClipboardText.ToString());
             if (ClipboardPreset != null)
                 _logger.LogDebug("Parsed ClipboardPreset: {ClipboardPreset}", ClipboardPreset);
         }
@@ -56,7 +56,7 @@ public partial class ClipboardService : IDisposable
         }
     }
 
-    public async Task SetClipboardPortraitPreset(PortraitPreset? preset)
+    public async Task SetClipboardPortraitPreset(Records.BannerPreset? preset)
     {
         await OpenClipboard();
 

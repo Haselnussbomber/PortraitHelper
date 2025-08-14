@@ -3,15 +3,15 @@ using FFXIVClientStructs.FFXIV.Client.UI.Misc;
 using PortraitHelper.Interfaces;
 using PortraitHelper.Records;
 
-namespace PortraitHelper.Services;
+namespace PortraitHelper.Services.BannerEditor;
 
 [RegisterSingleton, AutoConstruct]
-public partial class MenuBarState
+public partial class BannerMenuBarState
 {
     private readonly IServiceProvider _serviceProvider;
     private readonly TextService _textService;
 
-    public PortraitPreset? InitialPreset { get; private set; }
+    public Records.BannerPreset? InitialPreset { get; private set; }
     public IOverlay? Overlay { get; private set; }
     public string PortraitName { get; private set; } = string.Empty;
 
@@ -52,7 +52,7 @@ public partial class MenuBarState
         if (!agent->EditorState->CharaView->CharaViewPortraitCharacterLoaded)
             return;
 
-        InitialPreset = PortraitPreset.FromState();
+        InitialPreset = Records.BannerPreset.FromState();
 
         if (agent->EditorState->OpenType == AgentBannerEditorState.EditorOpenType.AdventurerPlate)
         {

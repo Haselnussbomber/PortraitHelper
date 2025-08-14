@@ -69,7 +69,7 @@ public partial class PluginConfig : IPluginConfiguration
         if (pluginConfig == null)
             return new();
 
-        pluginConfig.Presets.RemoveAll(preset => string.IsNullOrEmpty(preset.Name) || preset.Preset == null);
+        pluginConfig.BannerPresets.RemoveAll(preset => string.IsNullOrEmpty(preset.Name) || preset.Preset == null);
 
         return pluginConfig;
     }
@@ -183,7 +183,7 @@ public partial class PluginConfig : IPluginConfiguration
 
             try
             {
-                config.Presets.Add(new SavedPreset(id, name, PortraitPreset.FromExportedString(presetString)));
+                config.BannerPresets.Add(new SavedBannerPreset(id, name, Records.BannerPreset.FromExportedString(presetString)));
             }
             catch (Exception e)
             {
@@ -201,7 +201,7 @@ public partial class PluginConfig
 {
     public int Version { get; set; } = CURRENT_CONFIG_VERSION;
 
-    public List<SavedPreset> Presets = [];
+    public List<SavedBannerPreset> BannerPresets = [];
     public bool ShowAlignmentTool = false;
     public int AlignmentToolVerticalLines = 2;
     public Color AlignmentToolVerticalColor = new(0, 0, 0, 1f);

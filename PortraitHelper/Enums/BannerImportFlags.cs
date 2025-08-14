@@ -1,7 +1,7 @@
 namespace PortraitHelper.Enums;
 
 [Flags]
-public enum ImportFlags
+public enum BannerImportFlags
 {
     None = 0,
     BannerBg = 1 << 0,

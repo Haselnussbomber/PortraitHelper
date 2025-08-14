@@ -12,7 +12,7 @@ using SharpDX.DXGI;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
-namespace PortraitHelper.Services;
+namespace PortraitHelper.Services.BannerEditor;
 
 [RegisterSingleton, AutoConstruct]
 public unsafe partial class BannerService
@@ -141,7 +141,7 @@ public unsafe partial class BannerService
             : _textService.GetAddonText(624);
     }
 
-    public unsafe void ImportPresetToState(PortraitPreset? preset, ImportFlags importFlags = ImportFlags.All)
+    public unsafe void ImportPresetToState(Records.BannerPreset? preset, BannerImportFlags importFlags = BannerImportFlags.All)
     {
         if (preset == null)
             return;
@@ -160,85 +160,85 @@ public unsafe partial class BannerService
         state->CharaView->ExportPortraitData(tempPortraitData);
 
         var hasBgChanged =
-            importFlags.HasFlag(ImportFlags.BannerBg) &&
+            importFlags.HasFlag(BannerImportFlags.BannerBg) &&
             IsBannerBgUnlocked(preset.BannerBg) &&
             tempPortraitData->BannerBg != preset.BannerBg;
 
         var hasFrameChanged =
-            importFlags.HasFlag(ImportFlags.BannerFrame) &&
+            importFlags.HasFlag(BannerImportFlags.BannerFrame) &&
             IsBannerFrameUnlocked(preset.BannerFrame) &&
             bannerEntry.BannerFrame != preset.BannerFrame;
 
         var hasDecorationChanged =
-            importFlags.HasFlag(ImportFlags.BannerDecoration) &&
+            importFlags.HasFlag(BannerImportFlags.BannerDecoration) &&
             IsBannerDecorationUnlocked(preset.BannerDecoration) &&
             bannerEntry.BannerDecoration != preset.BannerDecoration;
 
         var hasBannerTimelineChanged =
-            importFlags.HasFlag(ImportFlags.BannerTimeline) &&
+            importFlags.HasFlag(BannerImportFlags.BannerTimeline) &&
             IsBannerTimelineUnlocked(preset.BannerTimeline) &&
             tempPortraitData->BannerTimeline != preset.BannerTimeline;
 
         var hasExpressionChanged =
-            importFlags.HasFlag(ImportFlags.Expression) &&
+            importFlags.HasFlag(BannerImportFlags.Expression) &&
             tempPortraitData->Expression != preset.Expression;
 
         var hasAmbientLightingBrightnessChanged =
-            importFlags.HasFlag(ImportFlags.AmbientLightingBrightness) &&
+            importFlags.HasFlag(BannerImportFlags.AmbientLightingBrightness) &&
             tempPortraitData->AmbientLightingBrightness != preset.AmbientLightingBrightness;
 
         var hasAmbientLightingColorChanged =
-            importFlags.HasFlag(ImportFlags.AmbientLightingColor) && (
+            importFlags.HasFlag(BannerImportFlags.AmbientLightingColor) && (
                 tempPortraitData->AmbientLightingColorRed != preset.AmbientLightingColorRed ||
                 tempPortraitData->AmbientLightingColorGreen != preset.AmbientLightingColorGreen ||
                 tempPortraitData->AmbientLightingColorBlue != preset.AmbientLightingColorBlue
             );
 
         var hasDirectionalLightingBrightnessChanged =
-            importFlags.HasFlag(ImportFlags.DirectionalLightingBrightness) &&
+            importFlags.HasFlag(BannerImportFlags.DirectionalLightingBrightness) &&
             tempPortraitData->DirectionalLightingBrightness != preset.DirectionalLightingBrightness;
 
         var hasDirectionalLightingColorChanged =
-            importFlags.HasFlag(ImportFlags.DirectionalLightingColor) && (
+            importFlags.HasFlag(BannerImportFlags.DirectionalLightingColor) && (
                 tempPortraitData->DirectionalLightingColorRed != preset.DirectionalLightingColorRed ||
                 tempPortraitData->DirectionalLightingColorGreen != preset.DirectionalLightingColorGreen ||
                 tempPortraitData->DirectionalLightingColorBlue != preset.DirectionalLightingColorBlue
             );
 
         var hasDirectionalLightingVerticalAngleChanged =
-            importFlags.HasFlag(ImportFlags.DirectionalLightingVerticalAngle) &&
+            importFlags.HasFlag(BannerImportFlags.DirectionalLightingVerticalAngle) &&
             tempPortraitData->DirectionalLightingVerticalAngle != preset.DirectionalLightingVerticalAngle;
 
         var hasDirectionalLightingHorizontalAngleChanged =
-            importFlags.HasFlag(ImportFlags.DirectionalLightingHorizontalAngle) &&
+            importFlags.HasFlag(BannerImportFlags.DirectionalLightingHorizontalAngle) &&
             tempPortraitData->DirectionalLightingHorizontalAngle != preset.DirectionalLightingHorizontalAngle;
 
         var hasAnimationProgressChanged =
-            importFlags.HasFlag(ImportFlags.AnimationProgress) &&
+            importFlags.HasFlag(BannerImportFlags.AnimationProgress) &&
             !tempPortraitData->AnimationProgress.IsApproximately(preset.AnimationProgress, 0.01f);
 
         var hasCameraPositionChanged =
-            importFlags.HasFlag(ImportFlags.CameraPosition) &&
+            importFlags.HasFlag(BannerImportFlags.CameraPosition) &&
             !tempPortraitData->CameraPosition.IsApproximately(preset.CameraPosition);
 
         var hasCameraTargetChanged =
-            importFlags.HasFlag(ImportFlags.CameraTarget) &&
+            importFlags.HasFlag(BannerImportFlags.CameraTarget) &&
             !tempPortraitData->CameraTarget.IsApproximately(preset.CameraTarget);
 
         var hasHeadDirectionChanged =
-            importFlags.HasFlag(ImportFlags.HeadDirection) &&
+            importFlags.HasFlag(BannerImportFlags.HeadDirection) &&
             !tempPortraitData->HeadDirection.IsApproximately(preset.HeadDirection);
 
         var hasEyeDirectionChanged =
-            importFlags.HasFlag(ImportFlags.EyeDirection) &&
+            importFlags.HasFlag(BannerImportFlags.EyeDirection) &&
             !tempPortraitData->EyeDirection.IsApproximately(preset.EyeDirection);
 
         var hasCameraZoomChanged =
-            importFlags.HasFlag(ImportFlags.CameraZoom) &&
+            importFlags.HasFlag(BannerImportFlags.CameraZoom) &&
             tempPortraitData->CameraZoom != preset.CameraZoom;
 
         var hasImageRotationChanged =
-            importFlags.HasFlag(ImportFlags.ImageRotation) &&
+            importFlags.HasFlag(BannerImportFlags.ImageRotation) &&
             tempPortraitData->ImageRotation != preset.ImageRotation;
 
         if (hasBgChanged)

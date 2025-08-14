@@ -1,12 +1,12 @@
 using PortraitHelper.Interfaces;
-using PortraitHelper.Services;
+using PortraitHelper.Services.BannerEditor;
 
 namespace PortraitHelper.Components;
 
 [AutoConstruct]
 public partial class MenuBarOverlayButton<T> : MenuBarButton where T : IOverlay
 {
-    private readonly MenuBarState _state;
+    private readonly BannerMenuBarState _state;
 
     public override bool IsActive => _state.Overlay is T;
 

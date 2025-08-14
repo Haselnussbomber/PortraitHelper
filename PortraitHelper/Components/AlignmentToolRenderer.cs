@@ -1,15 +1,15 @@
 using FFXIVClientStructs.FFXIV.Client.UI;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
+using PortraitHelper.Windows.BannerEditor.Overlays;
 using PortraitHelper.Config;
-using PortraitHelper.Services;
-using PortraitHelper.Windows.Overlays;
+using PortraitHelper.Services.BannerEditor;
 
 namespace PortraitHelper.Components;
 
 [RegisterSingleton, AutoConstruct]
 public unsafe partial class AlignmentToolRenderer
 {
-    private readonly MenuBarState _state;
+    private readonly BannerMenuBarState _state;
     private readonly PluginConfig _pluginConfig;
 
     public void Draw()

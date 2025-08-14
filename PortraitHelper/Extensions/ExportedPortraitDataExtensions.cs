@@ -1,11 +1,10 @@
 using FFXIVClientStructs.FFXIV.Client.UI.Misc;
-using PortraitHelper.Records;
 
 namespace PortraitHelper.Extensions;
 
 public static class ExportedPortraitDataExtensions
 {
-    public static bool ToPortraitPreset(this ref ExportedPortraitData portraitData, PortraitPreset preset)
+    public static bool ToPortraitPreset(this ref ExportedPortraitData portraitData, BannerPreset preset)
     {
         preset.CameraPosition = portraitData.CameraPosition;
         preset.CameraTarget = portraitData.CameraTarget;
@@ -30,7 +29,7 @@ public static class ExportedPortraitDataExtensions
         return true;
     }
 
-    public static bool FromPortraitPreset(this ref ExportedPortraitData portraitData, PortraitPreset preset)
+    public static bool FromPortraitPreset(this ref ExportedPortraitData portraitData, BannerPreset preset)
     {
         portraitData.CameraPosition = preset.CameraPosition;
         portraitData.CameraTarget = preset.CameraTarget;

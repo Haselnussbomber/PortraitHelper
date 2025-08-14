@@ -2,12 +2,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using Microsoft.Extensions.Hosting;
-using PortraitHelper.Windows;
+using PortraitHelper.Windows.BannerEditor;
 
-namespace PortraitHelper.Services;
+namespace PortraitHelper.Services.BannerEditor;
 
 [RegisterSingleton<IHostedService>(Duplicate = DuplicateStrategy.Append), AutoConstruct]
-public partial class MenuBarManager : IHostedService
+public partial class BannerMenuBarManager : IHostedService
 {
     private readonly AddonObserver _addonObserver;
     private readonly MenuBar _menuBar;

@@ -8,10 +8,10 @@ using PortraitHelper.JsonConverters;
 
 namespace PortraitHelper.Records;
 
-[JsonConverter(typeof(PortraitPresetConverter))]
-public sealed record PortraitPreset
+[JsonConverter(typeof(BannerPresetConverter))]
+public sealed record BannerPreset
 {
-    public const int Magic = 0x53504850; // PHPS => Portrait Helper Preset String
+    public const int Magic = 0x53424850; // PHBS => Portrait Helper Banner String
     public ushort Version = 1;
 
     public HalfVector4 CameraPosition;
@@ -38,7 +38,7 @@ public sealed record PortraitPreset
     public ushort BannerFrame;
     public ushort BannerDecoration;
 
-    public static PortraitPreset? FromExportedString(string? input)
+    public static BannerPreset? FromExportedString(string? input)
     {
         if (string.IsNullOrEmpty(input))
             return null;
@@ -63,7 +63,7 @@ public sealed record PortraitPreset
         if (magic is not (0x53505448 or Magic)) // HTPS for compatibility
             return null;
 
-        var preset = new PortraitPreset
+        var preset = new BannerPreset
         {
             Version = reader.ReadUInt16()
         };
@@ -102,10 +102,10 @@ public sealed record PortraitPreset
         return preset;
     }
 
-    public static unsafe PortraitPreset? FromState()
+    public static unsafe BannerPreset? FromState()
     {
         var state = AgentBannerEditor.Instance()->EditorState;
-        var preset = new PortraitPreset();
+        var preset = new BannerPreset();
 
         var portraitData = stackalloc ExportedPortraitData[1];
         state->CharaView->ExportPortraitData(portraitData);

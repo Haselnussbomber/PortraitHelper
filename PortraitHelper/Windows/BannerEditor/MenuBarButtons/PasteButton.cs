@@ -1,12 +1,12 @@
 using PortraitHelper.Components;
-using PortraitHelper.Services;
+using PortraitHelper.Services.BannerEditor;
 
-namespace PortraitHelper.Windows.MenuBarButtons;
+namespace PortraitHelper.Windows.BannerEditor.MenuBarButtons;
 
 [RegisterSingleton, AutoConstruct]
 public unsafe partial class PasteButton : MenuBarButton
 {
-    private readonly MenuBarState _state;
+    private readonly BannerMenuBarState _state;
     private readonly TextService _textService;
     private readonly ClipboardService _clipboardService;
     private readonly BannerService _bannerService;

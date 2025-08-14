@@ -1,8 +1,8 @@
 using PortraitHelper.Components;
 using PortraitHelper.Config;
-using PortraitHelper.Windows.Overlays;
+using PortraitHelper.Windows.BannerEditor.Overlays;
 
-namespace PortraitHelper.Windows.MenuBarButtons;
+namespace PortraitHelper.Windows.BannerEditor.MenuBarButtons;
 
 [RegisterSingleton, AutoConstruct]
 public partial class AlignmentToolButton : MenuBarOverlayButton<AlignmentToolSettingsOverlay>

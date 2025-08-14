@@ -1,14 +1,14 @@
+using PortraitHelper.Windows.BannerEditor.Dialogs;
 using PortraitHelper.Components;
 using PortraitHelper.Records;
-using PortraitHelper.Services;
-using PortraitHelper.Windows.Dialogs;
+using PortraitHelper.Services.BannerEditor;
 
-namespace PortraitHelper.Windows.MenuBarButtons;
+namespace PortraitHelper.Windows.BannerEditor.MenuBarButtons;
 
 [RegisterSingleton, AutoConstruct]
 public unsafe partial class SaveAsPresetButton : MenuBarButton
 {
-    private readonly MenuBarState _state;
+    private readonly BannerMenuBarState _state;
     private readonly TextService _textService;
     private readonly BannerService _bannerService;
     private readonly CreatePresetDialog _createPresetDialog;
@@ -23,6 +23,6 @@ public unsafe partial class SaveAsPresetButton : MenuBarButton
 
     public override void OnClick()
     {
-        _createPresetDialog.Open(_state.PortraitName, PortraitPreset.FromState(), _bannerService.GetCurrentCharaViewImage());
+        _createPresetDialog.Open(_state.PortraitName, Records.BannerPreset.FromState(), _bannerService.GetCurrentCharaViewImage());
     }
 }

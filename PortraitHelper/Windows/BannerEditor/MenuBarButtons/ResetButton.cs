@@ -1,13 +1,13 @@
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using PortraitHelper.Components;
-using PortraitHelper.Services;
+using PortraitHelper.Services.BannerEditor;
 
-namespace PortraitHelper.Windows.MenuBarButtons;
+namespace PortraitHelper.Windows.BannerEditor.MenuBarButtons;
 
 [RegisterSingleton, AutoConstruct]
 public unsafe partial class ResetButton : MenuBarButton
 {
-    private readonly MenuBarState _state;
+    private readonly BannerMenuBarState _state;
     private readonly TextService _textService;
     private readonly BannerService _bannerService;
 

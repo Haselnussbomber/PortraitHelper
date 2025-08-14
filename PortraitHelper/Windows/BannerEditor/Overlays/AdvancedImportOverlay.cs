@@ -1,14 +1,15 @@
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using FFXIVClientStructs.FFXIV.Common.Math;
+using PortraitHelper.Components;
 using PortraitHelper.Enums;
-using PortraitHelper.Services;
+using PortraitHelper.Services.BannerEditor;
 
-namespace PortraitHelper.Windows.Overlays;
+namespace PortraitHelper.Windows.BannerEditor.Overlays;
 
 [RegisterTransient, AutoConstruct]
 public unsafe partial class AdvancedImportOverlay : Overlay
 {
-    private readonly MenuBarState _state;
+    private readonly BannerMenuBarState _state;
     private readonly TextService _textService;
     private readonly ExcelService _excelService;
     private readonly BannerService _bannerService;
@@ -31,12 +32,12 @@ public unsafe partial class AdvancedImportOverlay : Overlay
         var unknown = _textService.GetAddonText(624) ?? "Unknown";
 
         if (ImGui.Button(_textService.GetAddonText(14923) ?? "Select All"))
-            _clipboardService.CurrentImportFlags = ImportFlags.All;
+            _clipboardService.CurrentImportFlags = BannerImportFlags.All;
 
         ImGui.SameLine();
 
         if (ImGui.Button(_textService.GetAddonText(14924) ?? "Deselect All"))
-            _clipboardService.CurrentImportFlags = ImportFlags.None;
+            _clipboardService.CurrentImportFlags = BannerImportFlags.None;
 
         ImGui.SameLine();
 
@@ -51,7 +52,7 @@ public unsafe partial class AdvancedImportOverlay : Overlay
         var isBannerBgUnlocked = _bannerService.IsBannerBgUnlocked(_clipboardService.ClipboardPreset.BannerBg);
         DrawImportSetting(
             _textService.GetAddonText(14687) ?? "Background",
-            ImportFlags.BannerBg,
+            BannerImportFlags.BannerBg,
             () =>
             {
                 if (_excelService.TryGetRow<BannerBg>(_clipboardService.ClipboardPreset.BannerBg, out var bannerBgRow))
@@ -68,7 +69,7 @@ public unsafe partial class AdvancedImportOverlay : Overlay
         var isBannerFrameUnlocked = _bannerService.IsBannerFrameUnlocked(_clipboardService.ClipboardPreset.BannerFrame);
         DrawImportSetting(
             _textService.GetAddonText(14688) ?? "Frame",
-            ImportFlags.BannerFrame,
+            BannerImportFlags.BannerFrame,
             () =>
             {
                 if (_excelService.TryGetRow<BannerFrame>(_clipboardService.ClipboardPreset.BannerFrame, out var bannerFrameRow))
@@ -85,7 +86,7 @@ public unsafe partial class AdvancedImportOverlay : Overlay
         var isBannerDecorationUnlocked = _bannerService.IsBannerDecorationUnlocked(_clipboardService.ClipboardPreset.BannerDecoration);
         DrawImportSetting(
             _textService.GetAddonText(14689) ?? "Accent",
-            ImportFlags.BannerDecoration,
+            BannerImportFlags.BannerDecoration,
             () =>
             {
                 if (_excelService.TryGetRow<BannerDecoration>(_clipboardService.ClipboardPreset.BannerDecoration, out var bannerDecorationRow))
@@ -101,13 +102,13 @@ public unsafe partial class AdvancedImportOverlay : Overlay
 
         DrawImportSetting(
             _textService.GetAddonText(14711) ?? "Zoom",
-            ImportFlags.CameraZoom,
+            BannerImportFlags.CameraZoom,
             () => ImGui.TextUnformatted(_clipboardService.ClipboardPreset.CameraZoom.ToString())
         );
 
         DrawImportSetting(
             _textService.GetAddonText(14712) ?? "Rotation",
-            ImportFlags.ImageRotation,
+            BannerImportFlags.ImageRotation,
             () => ImGui.TextUnformatted(_clipboardService.ClipboardPreset.ImageRotation.ToString())
         );
 
@@ -116,7 +117,7 @@ public unsafe partial class AdvancedImportOverlay : Overlay
         var isBannerTimelineUnlocked = _bannerService.IsBannerTimelineUnlocked(_clipboardService.ClipboardPreset.BannerTimeline);
         DrawImportSetting(
             _textService.GetAddonText(14690) ?? "Pose",
-            ImportFlags.BannerTimeline,
+            BannerImportFlags.BannerTimeline,
             () =>
             {
                 ImGui.TextUnformatted(_bannerService.GetBannerTimelineName(_clipboardService.ClipboardPreset.BannerTimeline));
@@ -129,7 +130,7 @@ public unsafe partial class AdvancedImportOverlay : Overlay
 
         DrawImportSetting(
             _textService.GetAddonText(14691) ?? "Expression",
-            ImportFlags.Expression,
+            BannerImportFlags.Expression,
             () =>
             {
                 var id = _clipboardService.ClipboardPreset.Expression;
@@ -161,31 +162,31 @@ public unsafe partial class AdvancedImportOverlay : Overlay
 
         DrawImportSetting(
             _textService.Translate("Setting.AnimationTimestamp.Label"),
-            ImportFlags.AnimationProgress,
+            BannerImportFlags.AnimationProgress,
             () => ImGui.TextUnformatted(_textService.Translate("Setting.AnimationTimestamp.ValueFormat", _clipboardService.ClipboardPreset.AnimationProgress))
         );
 
         DrawImportSetting(
             _textService.GetAddonText(5972) ?? "Camera Position",
-            ImportFlags.CameraPosition,
+            BannerImportFlags.CameraPosition,
             () => DrawHalfVector4(_clipboardService.ClipboardPreset.CameraPosition)
         );
 
         DrawImportSetting(
             _textService.Translate("Setting.CameraTarget.Label"),
-            ImportFlags.CameraTarget,
+            BannerImportFlags.CameraTarget,
             () => DrawHalfVector4(_clipboardService.ClipboardPreset.CameraTarget)
         );
 
         DrawImportSetting(
             _textService.Translate("Setting.HeadDirection.Label"),
-            ImportFlags.HeadDirection,
+            BannerImportFlags.HeadDirection,
             () => DrawHalfVector2(_clipboardService.ClipboardPreset.HeadDirection)
         );
 
         DrawImportSetting(
             _textService.Translate("Setting.EyeDirection.Label"),
-            ImportFlags.EyeDirection,
+            BannerImportFlags.EyeDirection,
             () => DrawHalfVector2(_clipboardService.ClipboardPreset.EyeDirection)
         );
 
@@ -196,13 +197,13 @@ public unsafe partial class AdvancedImportOverlay : Overlay
 
         DrawImportSetting(
             labelBrightness,
-            ImportFlags.AmbientLightingBrightness,
+            BannerImportFlags.AmbientLightingBrightness,
             () => ImGui.TextUnformatted(_clipboardService.ClipboardPreset.AmbientLightingBrightness.ToString())
         );
 
         DrawImportSetting(
             labelColor,
-            ImportFlags.AmbientLightingColor,
+            BannerImportFlags.AmbientLightingColor,
             () => DrawColor(
                 _clipboardService.ClipboardPreset.AmbientLightingColorRed,
                 _clipboardService.ClipboardPreset.AmbientLightingColorGreen,
@@ -214,13 +215,13 @@ public unsafe partial class AdvancedImportOverlay : Overlay
 
         DrawImportSetting(
             labelBrightness,
-            ImportFlags.DirectionalLightingBrightness,
+            BannerImportFlags.DirectionalLightingBrightness,
             () => ImGui.TextUnformatted(_clipboardService.ClipboardPreset.DirectionalLightingBrightness.ToString())
         );
 
         DrawImportSetting(
             labelColor,
-            ImportFlags.DirectionalLightingColor,
+            BannerImportFlags.DirectionalLightingColor,
             () => DrawColor(
                 _clipboardService.ClipboardPreset.DirectionalLightingColorRed,
                 _clipboardService.ClipboardPreset.DirectionalLightingColorGreen,
@@ -230,13 +231,13 @@ public unsafe partial class AdvancedImportOverlay : Overlay
 
         DrawImportSetting(
             _textService.GetAddonText(14696) ?? "Vertical Angle",
-            ImportFlags.DirectionalLightingVerticalAngle,
+            BannerImportFlags.DirectionalLightingVerticalAngle,
             () => ImGui.TextUnformatted(_clipboardService.ClipboardPreset.DirectionalLightingVerticalAngle.ToString())
         );
 
         DrawImportSetting(
             _textService.GetAddonText(14695) ?? "Horizontal Angle",
-            ImportFlags.DirectionalLightingHorizontalAngle,
+            BannerImportFlags.DirectionalLightingHorizontalAngle,
             () => ImGui.TextUnformatted(_clipboardService.ClipboardPreset.DirectionalLightingHorizontalAngle.ToString())
         );
 
@@ -244,7 +245,7 @@ public unsafe partial class AdvancedImportOverlay : Overlay
             ImGuiUtils.PushCursorY(ImGui.GetStyle().ItemSpacing.Y);
     }
 
-    private void DrawImportSetting(string label, ImportFlags flag, System.Action drawFn, bool isUnlocked = true)
+    private void DrawImportSetting(string label, BannerImportFlags flag, System.Action drawFn, bool isUnlocked = true)
     {
         using var id = ImRaii.PushId(flag.ToString());
 

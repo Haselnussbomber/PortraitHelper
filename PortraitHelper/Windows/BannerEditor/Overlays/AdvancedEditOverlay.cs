@@ -3,10 +3,11 @@ using FFXIVClientStructs.FFXIV.Client.UI;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using FFXIVClientStructs.FFXIV.Client.UI.Misc;
 using FFXIVClientStructs.Havok.Animation.Animation;
+using PortraitHelper.Components;
 using PortraitHelper.Enums;
 using Character = FFXIVClientStructs.FFXIV.Client.Game.Character.Character;
 
-namespace PortraitHelper.Windows.Overlays;
+namespace PortraitHelper.Windows.BannerEditor.Overlays;
 
 [RegisterTransient, AutoConstruct]
 public unsafe partial class AdvancedEditOverlay : Overlay

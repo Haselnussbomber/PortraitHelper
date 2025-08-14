@@ -1,7 +1,7 @@
 using PortraitHelper.Components;
-using PortraitHelper.Windows.Overlays;
+using PortraitHelper.Windows.BannerEditor.Overlays;
 
-namespace PortraitHelper.Windows.MenuBarButtons;
+namespace PortraitHelper.Windows.BannerEditor.MenuBarButtons;
 
 [RegisterSingleton, AutoConstruct]
 public partial class PresetBrowserButton : MenuBarOverlayButton<PresetBrowserOverlay>

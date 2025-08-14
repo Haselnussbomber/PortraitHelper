@@ -1,7 +1,7 @@
 namespace PortraitHelper.Enums;
 
 [Flags]
-public enum CopyImageFlags
+public enum BannerCopyImageFlags
 {
     None,
     NoFrame,
