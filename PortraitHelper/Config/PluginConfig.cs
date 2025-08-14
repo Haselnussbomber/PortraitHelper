@@ -227,6 +227,7 @@ public partial class PluginConfig
     public int Version { get; set; } = CURRENT_CONFIG_VERSION;
 
     public List<SavedBannerPreset> BannerPresets = [];
+    public List<SavedCharaCardPreset> CharaCardPresets = [];
     public bool ShowAlignmentTool = false;
     public int AlignmentToolVerticalLines = 2;
     public Color AlignmentToolVerticalColor = new(0, 0, 0, 1f);
