@@ -13,7 +13,7 @@ using SixLabors.ImageSharp.Processing;
 
 namespace PortraitHelper.Windows.Overlays;
 
-[RegisterSingleton, AutoConstruct]
+[RegisterTransient, AutoConstruct]
 public partial class PresetBrowserOverlay : Overlay
 {
     private static readonly Vector2 PortraitSize = new(576, 960); // native texture size
@@ -22,6 +22,7 @@ public partial class PresetBrowserOverlay : Overlay
     private static readonly Color ButtonHoveredColor = Color.White with { A = 0.2f };
 
     private readonly ILogger<PresetBrowserOverlay> _logger;
+    private readonly MenuBarState _state;
     private readonly IDataManager _dataManager;
     private readonly ITextureProvider _textureProvider;
     private readonly PluginConfig _pluginConfig;
@@ -34,8 +35,6 @@ public partial class PresetBrowserOverlay : Overlay
     private readonly DeletePresetDialog _deletePresetDialog;
     private readonly EditPresetDialog _editPresetDialog;
 
-    public MenuBar MenuBar { get; internal set; } = null!;
-
     [AutoPostConstruct]
     private void Initialize()
     {
@@ -44,12 +43,6 @@ public partial class PresetBrowserOverlay : Overlay
             MinimumSize = new Vector2(600, 500),
             MaximumSize = new Vector2(4069),
         };
-    }
-
-    public void Open(MenuBar menuBar)
-    {
-        MenuBar = menuBar;
-        Open();
     }
 
     public override void Draw()
@@ -283,7 +276,7 @@ public partial class PresetBrowserOverlay : Overlay
             if (ImGui.IsMouseDoubleClicked(ImGuiMouseButton.Left))
             {
                 _bannerService.ImportPresetToState(preset.Preset);
-                MenuBar.CloseOverlays();
+                _state.CloseOverlay();
             }
         }
 
@@ -296,7 +289,7 @@ public partial class PresetBrowserOverlay : Overlay
         if (ImGui.MenuItem(_textService.Translate("PresetBrowserOverlay.ContextMenu.LoadPreset.Label")))
         {
             _bannerService.ImportPresetToState(preset.Preset);
-            MenuBar.CloseOverlays();
+            _state.CloseOverlay();
         }
 
         if (ImGui.MenuItem(_textService.Translate("PresetBrowserOverlay.ContextMenu.EditPreset.Label")))

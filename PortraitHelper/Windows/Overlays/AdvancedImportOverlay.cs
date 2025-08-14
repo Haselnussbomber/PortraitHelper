@@ -5,22 +5,14 @@ using PortraitHelper.Services;
 
 namespace PortraitHelper.Windows.Overlays;
 
-[RegisterSingleton, AutoConstruct]
+[RegisterTransient, AutoConstruct]
 public unsafe partial class AdvancedImportOverlay : Overlay
 {
-    private readonly ILogger<AdvancedImportOverlay> _logger;
+    private readonly MenuBarState _state;
     private readonly TextService _textService;
     private readonly ExcelService _excelService;
     private readonly BannerService _bannerService;
     private readonly ClipboardService _clipboardService;
-
-    public MenuBar MenuBar { get; internal set; } = null!;
-
-    public void Open(MenuBar menuBar)
-    {
-        MenuBar = menuBar;
-        Open();
-    }
 
     public override void Draw()
     {
@@ -51,7 +43,7 @@ public unsafe partial class AdvancedImportOverlay : Overlay
         if (ImGui.Button(_textService.Translate("AdvancedImportOverlay.ImportSelectedSettingsButton.Label")))
         {
             _bannerService.ImportPresetToState(_clipboardService.ClipboardPreset, _clipboardService.CurrentImportFlags);
-            MenuBar.CloseOverlays();
+            _state.CloseOverlay();
         }
 
         ImGuiUtils.DrawSection(_textService.GetAddonText(14684) ?? "Design", respectUiTheme: !IsWindow);

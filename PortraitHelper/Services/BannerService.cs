@@ -141,8 +141,11 @@ public unsafe partial class BannerService
             : _textService.GetAddonText(624);
     }
 
-    public unsafe void ImportPresetToState(PortraitPreset preset, ImportFlags importFlags = ImportFlags.All)
+    public unsafe void ImportPresetToState(PortraitPreset? preset, ImportFlags importFlags = ImportFlags.All)
     {
+        if (preset == null)
+            return;
+
         if (!TryGetAddon<AddonBannerEditor>(AgentId.BannerEditor, out var addonBannerEditor))
             return;
 

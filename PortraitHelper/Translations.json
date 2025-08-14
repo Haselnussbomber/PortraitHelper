@@ -212,13 +212,9 @@
     "en": "Toggle Preset Browser",
     "de": "Vorlagen-Browser umschalten"
   },
-  "MenuBar.ToggleAlignmentTool.Label.CloseSettings": {
-    "en": "Toggle Alignment Tool\nShift: Close Settings",
-    "de": "Ausrichtungswerkzeug umschalten\nShift: Einstellungen schließen"
-  },
-  "MenuBar.ToggleAlignmentTool.Label.OpenSettings": {
-    "en": "Toggle Alignment Tool\nShift: Open Settings",
-    "de": "Ausrichtungswerkzeug umschalten\nShift: Einstellungen öffnen"
+  "MenuBar.ToggleAlignmentTool.Label": {
+    "en": "Toggle Alignment Tool\nShift: Open/close Settings",
+    "de": "Ausrichtungswerkzeug umschalten\nShift: Einstellungen öffnen/schließen"
   },
   "PresetBrowserOverlay.MovingPresetCard.Tooltip": {
     "en": "Moving \"{0}\"",

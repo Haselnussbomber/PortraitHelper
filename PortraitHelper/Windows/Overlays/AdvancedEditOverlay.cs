@@ -8,7 +8,7 @@ using Character = FFXIVClientStructs.FFXIV.Client.Game.Character.Character;
 
 namespace PortraitHelper.Windows.Overlays;
 
-[RegisterSingleton, AutoConstruct]
+[RegisterTransient, AutoConstruct]
 public unsafe partial class AdvancedEditOverlay : Overlay
 {
     private const float ThirtyFps = 30f;
