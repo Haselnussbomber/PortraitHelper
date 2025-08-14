@@ -9,6 +9,27 @@
     "en": "Portrait Helper Configuration",
     "de": "Portrait Helper Konfiguration"
   },
+  "LicensesWindow.Title": {
+    "en": "Portrait Helper - Licenses",
+    "de": "Portrait Helper - Lizenzen"
+  },
+
+  "ConfigWindow.GitHubLink.Tooltip": {
+    "en": "Visit the Portrait Helper GitHub Repository",
+    "de": "Zum Portrait Helper GitHub Repository"
+  },
+  "ConfigWindow.KoFiLink.Tooltip": {
+    "en": "Support me on Ko-fi",
+    "de": "Unterstütze mich auf Ko-fi"
+  },
+  "ConfigWindow.Licenses": {
+    "en": "Licenses",
+    "de": "Lizenzen"
+  },
+  "Config.ShowAlignmentTool": {
+    "en": "Show Alignment Tool",
+    "de": "Ausrichtungswerkzeug anzeigen"
+  },
 
   "CreatePresetDialog.Title": {
     "en": "Save as Preset",

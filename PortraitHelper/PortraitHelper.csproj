@@ -28,5 +28,6 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Translations.json" />
+    <EmbeddedResource Include="LICENSES.md" />
   </ItemGroup>
 </Project>
