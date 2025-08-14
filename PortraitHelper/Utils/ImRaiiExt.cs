@@ -1,5 +1,3 @@
-using Dalamud.Bindings.ImGui;
-using HaselCommon.Gui;
 using static Dalamud.Interface.Utility.Raii.ImRaii;
 
 namespace PortraitHelper.Utils;

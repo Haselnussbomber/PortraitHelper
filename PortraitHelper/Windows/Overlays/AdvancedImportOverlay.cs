@@ -1,12 +1,5 @@
-using Dalamud.Interface.Utility;
-using Dalamud.Interface.Utility.Raii;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using FFXIVClientStructs.FFXIV.Common.Math;
-using HaselCommon.Gui;
-using HaselCommon.Services;
-using Dalamud.Bindings.ImGui;
-using Lumina.Excel.Sheets;
-using Microsoft.Extensions.Logging;
 using PortraitHelper.Enums;
 using PortraitHelper.Services;
 

@@ -1,10 +1,7 @@
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using Dalamud.Hooking;
-using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.UI;
-using Microsoft.Extensions.Logging;
 using PortraitHelper.Enums;
 using PortraitHelper.Records;
 using PortraitHelper.Utils;

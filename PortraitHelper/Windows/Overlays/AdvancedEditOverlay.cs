@@ -1,16 +1,8 @@
-using System.Numerics;
-using Dalamud.Interface.Utility;
-using Dalamud.Interface.Utility.Raii;
 using FFXIVClientStructs.FFXIV.Client.Graphics.Scene;
 using FFXIVClientStructs.FFXIV.Client.UI;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using FFXIVClientStructs.FFXIV.Client.UI.Misc;
 using FFXIVClientStructs.Havok.Animation.Animation;
-using HaselCommon.Game;
-using HaselCommon.Gui;
-using HaselCommon.Services;
-using Dalamud.Bindings.ImGui;
-using Lumina.Excel.Sheets;
 using PortraitHelper.Enums;
 using Character = FFXIVClientStructs.FFXIV.Client.Game.Character.Character;
 

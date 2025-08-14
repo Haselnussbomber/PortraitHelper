@@ -1,9 +1,3 @@
-using System.Numerics;
-using Dalamud.Interface.Utility;
-using Dalamud.Interface.Utility.Raii;
-using HaselCommon.Gui;
-using HaselCommon.Services;
-using Dalamud.Bindings.ImGui;
 using PortraitHelper.Config;
 using PortraitHelper.Records;
 using PortraitHelper.Utils;

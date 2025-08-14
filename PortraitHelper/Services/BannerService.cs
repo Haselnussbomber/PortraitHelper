@@ -1,14 +1,9 @@
 using System.IO;
-using Dalamud.Plugin;
 using FFXIVClientStructs.FFXIV.Client.Graphics.Render;
 using FFXIVClientStructs.FFXIV.Client.UI;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using FFXIVClientStructs.FFXIV.Client.UI.Misc;
 using FFXIVClientStructs.FFXIV.Component.Exd;
-using HaselCommon.Extensions;
-using HaselCommon.Services;
-using Lumina.Excel.Sheets;
-using Microsoft.Extensions.Logging;
 using PortraitHelper.Enums;
 using PortraitHelper.Records;
 using SharpDX;
@@ -16,7 +11,6 @@ using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
-using ActionSheet = Lumina.Excel.Sheets.Action;
 
 namespace PortraitHelper.Services;
 

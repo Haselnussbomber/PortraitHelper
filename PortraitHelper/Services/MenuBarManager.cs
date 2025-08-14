@@ -1,5 +1,4 @@
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
-using HaselCommon.Services;
 using PortraitHelper.Windows;
 
 namespace PortraitHelper.Services;

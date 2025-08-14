@@ -1,7 +1,3 @@
-using Dalamud.Plugin;
-using Dalamud.Plugin.Services;
-using HaselCommon.Extensions;
-using Microsoft.Extensions.DependencyInjection;
 using PortraitHelper.Config;
 using PortraitHelper.Services;
 
