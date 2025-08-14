@@ -1,26 +1,31 @@
+using Microsoft.Extensions.Hosting;
 using PortraitHelper.Config;
-using PortraitHelper.Services;
 
 namespace PortraitHelper;
 
 public sealed class Plugin : IDalamudPlugin
 {
-    private readonly ServiceProvider _serviceProvider;
+    private readonly IHost _host;
 
-    public Plugin(IDalamudPluginInterface pluginInterface, IFramework framework)
+    public Plugin(IDalamudPluginInterface pluginInterface)
     {
-        _serviceProvider = new ServiceCollection()
-            .AddDalamud(pluginInterface)
-            .AddSingleton(PluginConfig.Load)
-            .AddHaselCommon()
-            .AddPortraitHelper()
-            .BuildServiceProvider();
+        _host = new HostBuilder()
+            .UseContentRoot(pluginInterface.AssemblyLocation.Directory!.FullName)
+            .ConfigureServices(services =>
+            {
+                services.AddDalamud(pluginInterface);
+                services.AddSingleton(PluginConfig.Load);
+                services.AddHaselCommon();
+                services.AddPortraitHelper();
+            })
+            .Build();
 
-        framework.RunOnFrameworkThread(_serviceProvider.GetRequiredService<MenuBarManager>);
+        _host.Start();
     }
 
     void IDisposable.Dispose()
     {
-        _serviceProvider.Dispose();
+        _host.StopAsync().GetAwaiter().GetResult();
+        _host.Dispose();
     }
 }
