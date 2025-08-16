@@ -3,6 +3,7 @@ using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using PortraitHelper.Config;
 using PortraitHelper.Enums;
 using PortraitHelper.Interfaces;
+using PortraitHelper.Services;
 
 namespace PortraitHelper.Windows;
 
@@ -11,12 +12,15 @@ public abstract unsafe partial class Overlay : SimpleWindow, IDisposable, IOverl
 {
     private readonly PluginConfig _pluginConfig;
     private readonly ExcelService _excelService;
+    private readonly MenuBarState _state;
 
     private readonly ImRaii.Style _windowPadding = new();
     private readonly ImRaii.Color _windowBg = new();
     private readonly ImRaii.Color _windowText = new();
 
     protected uint DefaultImGuiTextColor { get; set; }
+
+    private bool _isDisposed;
 
     public bool IsWindow { get; set; }
     public virtual OverlayType Type => OverlayType.Full;
@@ -32,8 +36,13 @@ public abstract unsafe partial class Overlay : SimpleWindow, IDisposable, IOverl
 
     public override void Dispose()
     {
-        OnClose();
-        base.Dispose();
+        if (!_isDisposed)
+        {
+            _isDisposed = true; // do this first, or else... recursion
+            OnClose();
+            base.Dispose();
+            GC.SuppressFinalize(this);
+        }
     }
 
     public override void OnClose()
@@ -43,6 +52,8 @@ public abstract unsafe partial class Overlay : SimpleWindow, IDisposable, IOverl
         _windowText.Dispose();
 
         ToggleUiVisibility(true);
+
+        _state.CloseOverlay();
 
         base.OnClose();
     }
