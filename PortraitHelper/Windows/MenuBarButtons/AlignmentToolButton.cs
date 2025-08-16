@@ -18,11 +18,20 @@ public partial class AlignmentToolButton : MenuBarOverlayButton<AlignmentToolSet
         TooltipText = _textService.Translate("MenuBar.ToggleAlignmentTool.Label");
     }
 
+    public override bool IsActive => _pluginConfig.ShowAlignmentTool;
+
     public override void OnClick()
     {
         if (ImGui.IsKeyDown(ImGuiKey.LeftShift) || ImGui.IsKeyDown(ImGuiKey.RightShift))
         {
-            base.OnClick();
+            if (_state.Overlay is AlignmentToolSettingsOverlay)
+            {
+                _state.CloseOverlay();
+            }
+            else
+            {
+                _state.OpenOverlay<AlignmentToolSettingsOverlay>();
+            }
         }
         else
         {
