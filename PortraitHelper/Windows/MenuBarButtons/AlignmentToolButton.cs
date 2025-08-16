@@ -1,5 +1,6 @@
 using PortraitHelper.Components;
 using PortraitHelper.Config;
+using PortraitHelper.Services;
 using PortraitHelper.Windows.Overlays;
 
 namespace PortraitHelper.Windows.MenuBarButtons;
@@ -9,6 +10,7 @@ public partial class AlignmentToolButton : MenuBarOverlayButton<AlignmentToolSet
 {
     private readonly TextService _textService;
     private readonly PluginConfig _pluginConfig;
+    private readonly MenuBarState _state;
 
     [AutoPostConstruct]
     private void Initialize()
