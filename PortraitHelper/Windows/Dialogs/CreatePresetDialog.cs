@@ -10,7 +10,7 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace PortraitHelper.Windows.Dialogs;
 
-[RegisterScoped, AutoConstruct]
+[RegisterSingleton, AutoConstruct]
 public partial class CreatePresetDialog
 {
     private readonly INotificationManager _notificationManager;

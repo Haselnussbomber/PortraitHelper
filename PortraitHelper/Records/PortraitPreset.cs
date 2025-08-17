@@ -102,7 +102,7 @@ public sealed record PortraitPreset
         return preset;
     }
 
-    public static unsafe PortraitPreset? FromState()
+    public static unsafe PortraitPreset FromState()
     {
         var state = AgentBannerEditor.Instance()->EditorState;
         var preset = new PortraitPreset();
