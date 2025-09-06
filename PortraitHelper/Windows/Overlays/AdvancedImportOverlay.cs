@@ -60,7 +60,7 @@ public unsafe partial class AdvancedImportOverlay : Overlay
                     ImGui.TextUnformatted(unknown);
 
                 if (!isBannerBgUnlocked)
-                    ImGuiUtils.TextUnformattedColored(Color.Red, _textService.Translate("AdvancedImportOverlay.NotUnlocked"));
+                    ImGui.TextColored(Color.Red, _textService.Translate("AdvancedImportOverlay.NotUnlocked"));
             },
             isBannerBgUnlocked
         );
@@ -77,7 +77,7 @@ public unsafe partial class AdvancedImportOverlay : Overlay
                     ImGui.TextUnformatted(unknown);
 
                 if (!isBannerFrameUnlocked)
-                    ImGuiUtils.TextUnformattedColored(Color.Red, _textService.Translate("AdvancedImportOverlay.NotUnlocked"));
+                    ImGui.TextColored(Color.Red, _textService.Translate("AdvancedImportOverlay.NotUnlocked"));
             },
             isBannerFrameUnlocked
         );
@@ -94,7 +94,7 @@ public unsafe partial class AdvancedImportOverlay : Overlay
                     ImGui.TextUnformatted(unknown);
 
                 if (!isBannerDecorationUnlocked)
-                    ImGuiUtils.TextUnformattedColored(Color.Red, _textService.Translate("AdvancedImportOverlay.NotUnlocked"));
+                    ImGui.TextColored(Color.Red, _textService.Translate("AdvancedImportOverlay.NotUnlocked"));
             },
             isBannerDecorationUnlocked
         );
@@ -122,7 +122,7 @@ public unsafe partial class AdvancedImportOverlay : Overlay
                 ImGui.TextUnformatted(_bannerService.GetBannerTimelineName(_clipboardService.ClipboardPreset.BannerTimeline));
 
                 if (!isBannerTimelineUnlocked)
-                    ImGuiUtils.TextUnformattedColored(Color.Red, _textService.Translate("AdvancedImportOverlay.NotUnlocked"));
+                    ImGui.TextColored(Color.Red, _textService.Translate("AdvancedImportOverlay.NotUnlocked"));
             },
             isBannerTimelineUnlocked
         );
