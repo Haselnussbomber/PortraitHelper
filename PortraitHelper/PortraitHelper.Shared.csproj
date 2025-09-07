@@ -4,6 +4,7 @@
   <!-- Project settings -->
   <PropertyGroup>
     <AssemblyName>PortraitHelper</AssemblyName>
+    <RootNamespace>$(AssemblyName)</RootNamespace>
     <Version>1.0.4</Version>
     <OutputPath>..\bin\</OutputPath>
     <DefineConstants>$(DefineConstants);AUTOCTOR_EMBED_ATTRIBUTES</DefineConstants>
@@ -20,17 +21,17 @@
     <EmbeddedResource Include="Translations.json" />
   </ItemGroup>
 
+  <!-- Licenses -->
+  <ItemGroup Condition="Exists('LICENSES.md')">
+    <EmbeddedResource Include="LICENSES.md" />
+    <None Include="LICENSES.md" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
   <!-- References to Dalamud dependencies -->
   <ItemGroup>
     <Reference Include="SharpDX" Private="false" />
     <Reference Include="SharpDX.Direct3D11" Private="false" />
     <Reference Include="SharpDX.DXGI" Private="false" />
-  </ItemGroup>
-
-  <!-- Licenses -->
-  <ItemGroup Condition="Exists('LICENSES.md')">
-    <EmbeddedResource Include="LICENSES.md" />
-    <None Include="LICENSES.md" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
   <!-- NuGet dependencies -->
@@ -44,6 +45,7 @@
   <!-- FFXIVClientStructs -->
   <PropertyGroup>
     <InteropGenerator_InteropNamespace>$(AssemblyName)</InteropGenerator_InteropNamespace>
+    <DefineConstants>$(DefineConstants);CUSTOM_CS</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
