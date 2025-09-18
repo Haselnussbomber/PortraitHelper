@@ -204,10 +204,10 @@ public partial class PresetBrowserOverlay : Overlay
         {
             if (target)
             {
-                var payload = ImGui.AcceptDragDropPayload("MovePresetCard");
+                var payload = ImGui.AcceptDragDropPayload("MovePresetCard"u8);
                 unsafe
                 {
-                    if (payload.IsDelivery() && payload.Data != null)
+                    if (!payload.IsNull && payload.IsDelivery() && payload.Data != null)
                     {
                         var presetId = MemoryHelper.Read<Guid>((nint)payload.Data).ToString();
                         var oldIndex = _pluginConfig.Presets.AsEnumerable().IndexOf((preset) => preset.Id.ToString() == presetId);
